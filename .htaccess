@@ -1,7 +1,21 @@
 <IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
     RewriteEngine On
 
-    # Prevent infinite rewrite loop if URL already targets public folder
-    RewriteCond %{REQUEST_URI} !^/public/
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Static Assets from public folder seamlessly
+    RewriteCond %{REQUEST_URI} ^/(build|images|pdf|favicon.ico|robots.txt|storage)
     RewriteRule ^(.*)$ public/$1 [L]
+
+    # Handle Front Controller
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
 </IfModule>
