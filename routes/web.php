@@ -86,11 +86,12 @@ Route::post('/webhooks/nowpayments', NowpaymentsWebhookController::class)->name(
 
 /*
 |--------------------------------------------------------------------------
-| SEO Dynamic Endpoints
+| SEO Dynamic & Shared Hosting Deploy Endpoints
 |--------------------------------------------------------------------------
 */
 Route::get('/sitemap.xml', [SeoController::class, 'sitemapXml'])->name('seo.sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robotsTxt'])->name('seo.robots');
+Route::match(['get', 'post'], '/api/deploy/webhook', \App\Http\Controllers\DeployWebhookController::class)->name('deploy.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
 
 /*
 |--------------------------------------------------------------------------
