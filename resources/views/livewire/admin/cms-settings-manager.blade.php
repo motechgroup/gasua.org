@@ -1,7 +1,7 @@
 <div class="space-y-8">
     <div>
         <h2 class="font-heading font-extrabold text-2xl text-slate-900 dark:text-white">CMS, System & Deployment Settings</h2>
-        <p class="text-xs text-slate-500">Update general site info, impact counter metrics, and execute live GitHub code updates & database migrations on shared hosting.</p>
+        <p class="text-xs text-slate-500">Update foundation info, impact metrics, and inspect GitHub commit status & database migrations.</p>
     </div>
 
     @if($saved)
@@ -11,22 +11,54 @@
         </div>
     @endif
 
-    <!-- Shared Hosting One-Click Deployment Box -->
+    <!-- Shared Hosting Git Deployer & Status Card -->
     <div class="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-8 border border-slate-800 shadow-2xl space-y-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest border border-emerald-500/30">
-                    Shared Hosting Git Deployer
-                </span>
-                <h3 class="font-heading font-bold text-xl text-white mt-2">Pull Latest GitHub Code & Run Migrations</h3>
-                <p class="text-xs text-slate-400 mt-1">Executes <code class="text-emerald-400 font-mono">git pull origin main</code> and <code class="text-emerald-400 font-mono">php artisan migrate --force</code> on your shared server.</p>
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest border border-emerald-500/30">
+                        Git Branch: origin/{{ $branchName }}
+                    </span>
+                    @if($latestCommitHash)
+                        <span class="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono text-[10px] font-bold">
+                            #{{ $latestCommitHash }}
+                        </span>
+                    @endif
+                </div>
+                <h3 class="font-heading font-bold text-xl text-white mt-2">GitHub Code Sync & Database Migrations</h3>
+                @if($latestCommitMessage)
+                    <p class="text-xs text-slate-300 mt-1 font-semibold">
+                        <i class="fa-solid fa-code-commit text-emerald-400 mr-1"></i> Latest Commit: "{{ $latestCommitMessage }}"
+                    </p>
+                    <span class="block text-[11px] text-slate-400 mt-0.5">Committed by <strong>{{ $latestCommitAuthor }}</strong> on {{ $latestCommitDate }}</span>
+                @else
+                    <p class="text-xs text-slate-400 mt-1">Executes database migrations and configuration cache refresh on your server.</p>
+                @endif
             </div>
             
             <button wire:click="runGitPullAndMigrate" wire:loading.attr="disabled" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-xs shadow-xl shadow-emerald-500/20 hover:scale-105 transition-all flex items-center gap-2">
-                <span wire:loading.remove><i class="fa-solid fa-cloud-arrow-down mr-1"></i> Pull Code & Run Migrations</span>
-                <span wire:loading><i class="fa-solid fa-spinner fa-spin mr-1"></i> Executing Git Pull & Migrations...</span>
+                <span wire:loading.remove><i class="fa-solid fa-cloud-arrow-down mr-1"></i> Sync Code & Run Migrations</span>
+                <span wire:loading><i class="fa-solid fa-spinner fa-spin mr-1"></i> Executing Migrations & Sync...</span>
             </button>
         </div>
+
+        @if(!empty($modifiedFiles))
+            <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80 space-y-2">
+                <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Recently Changed Files in <code class="text-emerald-400">origin/{{ $branchName }}</code>:</span>
+                <div class="flex flex-wrap gap-2 text-[11px] font-mono">
+                    @foreach($modifiedFiles as $file)
+                        <span class="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 flex items-center gap-1.5">
+                            @if($file['status'] === 'added') <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            @elseif($file['status'] === 'modified') <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                            @elseif($file['status'] === 'removed') <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                            @else <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+                            @endif
+                            {{ $file['name'] }}
+                        </span>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
         @if($deployOutput)
             <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-400 leading-relaxed overflow-x-auto whitespace-pre-wrap shadow-inner">
