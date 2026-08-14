@@ -126,7 +126,6 @@
                     <a href="{{ route('public.talents') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Talents</a>
                     <a href="{{ route('public.campaigns') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Campaigns</a>
                     <a href="{{ route('public.events') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Events</a>
-                    <a href="{{ route('public.news') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">News</a>
                     <a href="{{ route('public.gallery') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Gallery</a>
                     <a href="{{ route('public.volunteer') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Volunteer</a>
                     <a href="{{ route('public.contact') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Contact</a>
@@ -177,7 +176,6 @@
                         <a href="{{ route('public.talents') }}" class="py-2 hover:text-emerald-600">Talent Showcase</a>
                         <a href="{{ route('public.campaigns') }}" class="py-2 hover:text-emerald-600">Fundraising Campaigns</a>
                         <a href="{{ route('public.events') }}" class="py-2 hover:text-emerald-600">Upcoming Events</a>
-                        <a href="{{ route('public.news') }}" class="py-2 hover:text-emerald-600">News & Blogs</a>
                         <a href="{{ route('public.gallery') }}" class="py-2 hover:text-emerald-600">Gallery</a>
                         <a href="{{ route('public.volunteer') }}" class="py-2 hover:text-emerald-600">Volunteer</a>
                         <a href="{{ route('public.contact') }}" class="py-2 hover:text-emerald-600">Contact Us</a>
