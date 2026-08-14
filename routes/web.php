@@ -34,6 +34,7 @@ use App\Http\Controllers\Webhooks\FlutterwaveWebhookController;
 use App\Http\Controllers\Webhooks\DpoWebhookController;
 use App\Http\Controllers\Webhooks\PaypalWebhookController;
 use App\Http\Controllers\Webhooks\NowpaymentsWebhookController;
+use App\Http\Controllers\Webhooks\StripeWebhookController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\SeoController;
 
@@ -83,6 +84,7 @@ Route::post('/webhooks/flutterwave', FlutterwaveWebhookController::class)->name(
 Route::post('/webhooks/dpo', DpoWebhookController::class)->name('webhooks.dpo')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
 Route::post('/webhooks/paypal', PaypalWebhookController::class)->name('webhooks.paypal')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
 Route::post('/webhooks/nowpayments', NowpaymentsWebhookController::class)->name('webhooks.nowpayments')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+Route::post('/webhooks/stripe', StripeWebhookController::class)->name('webhooks.stripe')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
 
 /*
 |--------------------------------------------------------------------------

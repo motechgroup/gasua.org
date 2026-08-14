@@ -12,6 +12,7 @@ use App\Services\Payments\Drivers\FlutterwaveGatewayService;
 use App\Services\Payments\Drivers\DpoGatewayService;
 use App\Services\Payments\Drivers\PaypalGatewayService;
 use App\Services\Payments\Drivers\NowpaymentsGatewayService;
+use App\Services\Payments\Drivers\StripeGatewayService;
 use App\Services\DonationService;
 use Illuminate\Support\Facades\Log;
 
@@ -30,6 +31,7 @@ class PaymentManagerService
             'dpo' => new DpoGatewayService($gateway),
             'paypal' => new PaypalGatewayService($gateway),
             'nowpayments' => new NowpaymentsGatewayService($gateway),
+            'stripe' => new StripeGatewayService(),
             default => throw new \InvalidArgumentException("Unsupported payment gateway code: {$code}"),
         };
     }

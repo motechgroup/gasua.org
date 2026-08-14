@@ -117,6 +117,7 @@
                                     <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-lg text-emerald-600">
                                         @if($gw->code === 'mpesa') <i class="fa-solid fa-mobile-screen"></i>
                                         @elseif($gw->code === 'flutterwave') <i class="fa-solid fa-credit-card"></i>
+                                        @elseif($gw->code === 'stripe') <i class="fa-brands fa-stripe"></i>
                                         @elseif($gw->code === 'dpo') <i class="fa-solid fa-globe"></i>
                                         @elseif($gw->code === 'paypal') <i class="fa-brands fa-paypal"></i>
                                         @elseif($gw->code === 'nowpayments') <i class="fa-brands fa-bitcoin"></i>

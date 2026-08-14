@@ -80,6 +80,20 @@ class PaymentGatewaySeeder extends Seeder
                     'ipn_secret' => 'DEMO_NOWPAYMENTS_IPN_SECRET',
                 ],
             ],
+            [
+                'code' => 'stripe',
+                'name' => 'Stripe Credit/Debit Cards',
+                'is_enabled' => true,
+                'is_test_mode' => true,
+                'is_default' => false,
+                'fee_percentage' => 2.90,
+                'instructions' => 'Donate securely using Visa, Mastercard, American Express, Apple Pay, and Google Pay via Stripe.',
+                'credentials' => [
+                    'public_key' => 'pk_test_DEMO_STRIPE_PUBLIC_KEY',
+                    'secret_key' => 'sk_test_DEMO_STRIPE_SECRET_KEY',
+                    'webhook_secret' => 'whsec_DEMO_STRIPE_WEBHOOK_SECRET',
+                ],
+            ],
         ];
 
         foreach ($gateways as $gw) {
