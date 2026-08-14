@@ -114,6 +114,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/transparency', TransparencyManager::class)->name('admin.transparency');
     Route::get('/users', UserManager::class)->name('admin.users');
     Route::get('/cms', CmsSettingsManager::class)->name('admin.cms');
+    Route::get('/profile', \App\Livewire\Admin\ProfileManager::class)->name('admin.profile');
 });
 
 // Authentication Stub Routes
