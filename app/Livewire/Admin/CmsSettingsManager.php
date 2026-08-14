@@ -7,6 +7,7 @@ use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
 class CmsSettingsManager extends Component
 {
@@ -47,33 +48,38 @@ class CmsSettingsManager extends Component
 
     public function fetchGitStatus()
     {
-        try {
-            $response = Http::withHeaders([
-                'User-Agent' => 'Gusii-Foundation-Deployer',
-            ])->timeout(5)->get('https://api.github.com/repos/motechgroup/gasua.org/commits/main');
+        // Cache GitHub API response for 5 minutes to prevent shared hosting outbound HTTP spikes
+        $data = Cache::remember('github_commit_status', 300, function () {
+            try {
+                $response = Http::withHeaders([
+                    'User-Agent' => 'Gusii-Foundation-Deployer',
+                ])->timeout(3)->get('https://api.github.com/repos/motechgroup/gasua.org/commits/main');
 
-            if ($response->successful()) {
-                $data = $response->json();
-                $this->latestCommitHash = substr($data['sha'] ?? '', 0, 7);
-                $this->latestCommitMessage = strtok($data['commit']['message'] ?? '', "\n");
-                $this->latestCommitAuthor = $data['commit']['author']['name'] ?? 'Repository Admin';
-                $this->latestCommitDate = date('Y-m-d H:i:s T', strtotime($data['commit']['author']['date'] ?? 'now'));
-
-                $files = [];
-                if (!empty($data['files'])) {
-                    foreach (array_slice($data['files'], 0, 8) as $f) {
-                        $files[] = [
-                            'name' => $f['filename'],
-                            'status' => $f['status'] ?? 'modified',
-                            'additions' => $f['additions'] ?? 0,
-                            'deletions' => $f['deletions'] ?? 0,
-                        ];
-                    }
+                if ($response->successful()) {
+                    return $response->json();
                 }
-                $this->modifiedFiles = $files;
+            } catch (\Exception $e) {
+                // Fallback silently if offline or blocked
             }
-        } catch (\Exception $e) {
-            // Fallback silently if network restricted
+            return null;
+        });
+
+        if ($data) {
+            $this->latestCommitHash = substr($data['sha'] ?? '', 0, 7);
+            $this->latestCommitMessage = strtok($data['commit']['message'] ?? '', "\n");
+            $this->latestCommitAuthor = $data['commit']['author']['name'] ?? 'Repository Admin';
+            $this->latestCommitDate = date('Y-m-d H:i:s T', strtotime($data['commit']['author']['date'] ?? 'now'));
+
+            $files = [];
+            if (!empty($data['files'])) {
+                foreach (array_slice($data['files'], 0, 6) as $f) {
+                    $files[] = [
+                        'name' => $f['filename'],
+                        'status' => $f['status'] ?? 'modified',
+                    ];
+                }
+            }
+            $this->modifiedFiles = $files;
         }
     }
 
@@ -93,59 +99,38 @@ class CmsSettingsManager extends Component
 
     public function runGitPullAndMigrate()
     {
-        $this->isDeploying = true;
-        $this->fetchGitStatus();
+        // Increase time and memory limits for CloudLinux shared hosting
+        @ini_set('memory_limit', '256M');
+        @set_time_limit(120);
 
+        $this->isDeploying = true;
         $this->deployOutput = "Starting deployment sync...\n";
         $this->deployOutput .= "Branch: origin/" . $this->branchName . "\n";
         if ($this->latestCommitHash) {
-            $this->deployOutput .= "HEAD Commit: [" . $this->latestCommitHash . "] " . $this->latestCommitMessage . "\n";
-            $this->deployOutput .= "Author: " . $this->latestCommitAuthor . " (" . $this->latestCommitDate . ")\n\n";
+            $this->deployOutput .= "HEAD Commit: [" . $this->latestCommitHash . "] " . $this->latestCommitMessage . "\n\n";
         }
 
         try {
             $basePath = base_path();
 
-            // 1. Git Pull or File Sync
+            // 1. Git Pull or Status
             if (function_exists('exec')) {
                 $gitResult = Process::path($basePath)->run('git pull origin main 2>&1');
-                $this->deployOutput .= "[1/4] GIT PULL OUTPUT:\n" . $gitResult->output() . "\n";
+                $this->deployOutput .= "[1/3] GIT PULL:\n" . $gitResult->output() . "\n";
             } else {
-                $this->deployOutput .= "[1/4] CODE DEPLOYMENT STATUS:\n";
-                $this->deployOutput .= "PHP exec() is disabled on this shared host.\n";
-                $this->deployOutput .= "Latest Commit: [" . ($this->latestCommitHash ?: 'HEAD') . "] " . ($this->latestCommitMessage ?: 'Latest Main Branch') . "\n";
-                if (!empty($this->modifiedFiles)) {
-                    $this->deployOutput .= "Files updated in this commit:\n";
-                    foreach ($this->modifiedFiles as $file) {
-                        $this->deployOutput .= "  - " . $file['name'] . " (" . $file['status'] . ")\n";
-                    }
-                }
-                $this->deployOutput .= "\n";
+                $this->deployOutput .= "[1/3] DEPLOY STATUS:\n";
+                $this->deployOutput .= "PHP exec() disabled on server. Latest Commit: [" . ($this->latestCommitHash ?: 'HEAD') . "] " . ($this->latestCommitMessage ?: 'Main Branch') . "\n\n";
             }
 
-            // 2. Database Migrations via Artisan
+            // 2. Database Migrations
             Artisan::call('migrate', ['--force' => true]);
-            $this->deployOutput .= "[2/4] MIGRATIONS:\n" . (Artisan::output() ?: "All database tables are up to date.\n") . "\n";
+            $this->deployOutput .= "[2/3] MIGRATIONS:\n" . (Artisan::output() ?: "Database schema up to date.\n") . "\n";
 
-            // 3. Clear Caches
-            Artisan::call('config:clear');
-            Artisan::call('cache:clear');
+            // 3. Clear Cache Lightweight
             Artisan::call('view:clear');
-            $this->deployOutput .= "[3/4] CACHE CLEARED:\nConfiguration, views, and application cache refreshed.\n\n";
+            $this->deployOutput .= "[3/3] CACHE CLEARED:\nView cache refreshed.\n\n";
 
-            // 4. Storage Link
-            if (!file_exists(public_path('storage'))) {
-                if (function_exists('symlink')) {
-                    Artisan::call('storage:link');
-                    $this->deployOutput .= "[4/4] STORAGE LINK:\nPublic storage symlink created.\n";
-                } else {
-                    $this->deployOutput .= "[4/4] STORAGE LINK:\nSymlink function restricted on server.\n";
-                }
-            } else {
-                $this->deployOutput .= "[4/4] STORAGE LINK:\nStorage directory accessible.\n";
-            }
-
-            $this->deployOutput .= "\n✅ DEPLOYMENT & MIGRATION COMPLETED SUCCESSFULLY AT " . date('Y-m-d H:i:s T');
+            $this->deployOutput .= "✅ MIGRATION & SYNC TASK COMPLETED AT " . date('Y-m-d H:i:s T');
         } catch (\Exception $e) {
             $this->deployOutput .= "\n❌ ERROR: " . $e->getMessage();
         } finally {
