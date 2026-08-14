@@ -77,15 +77,9 @@
                 </div>
 
                 <form wire:submit.prevent="saveGateway" class="space-y-4 text-xs">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block font-bold mb-1">Display Name</label>
-                            <input type="text" wire:model="name" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        </div>
-                        <div>
-                            <label class="block font-bold mb-1">Gateway Fee (%)</label>
-                            <input type="number" step="0.01" wire:model="fee_percentage" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        </div>
+                    <div>
+                        <label class="block font-bold mb-1">Display Name</label>
+                        <input type="text" wire:model="name" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                     </div>
 
                     <div class="flex items-center gap-6 py-2">

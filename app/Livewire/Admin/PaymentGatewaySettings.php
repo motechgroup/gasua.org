@@ -60,7 +60,6 @@ class PaymentGatewaySettings extends Component
     {
         $this->validate([
             'name' => 'required|string|max:100',
-            'fee_percentage' => 'required|numeric|min:0|max:100',
         ]);
 
         $gw = PaymentGateway::where('code', $this->editingCode)->firstOrFail();
@@ -73,7 +72,7 @@ class PaymentGatewaySettings extends Component
         $gw->is_enabled = $this->is_enabled;
         $gw->is_test_mode = $this->is_test_mode;
         $gw->is_default = $this->is_default;
-        $gw->fee_percentage = $this->fee_percentage;
+        $gw->fee_percentage = 0.00;
         $gw->instructions = $this->instructions;
         $gw->credentials = $this->credentials;
         $gw->save();
