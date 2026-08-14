@@ -28,32 +28,30 @@
     <meta name="twitter:description" content="Empowering youth talents, feeding vulnerable families, and sponsoring bright students in Kisii & Nyamira Counties.">
 
     <!-- Schema.org JSON-LD Structured Data for Google Ranking -->
-    @verbatim
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "NGO",
-      "name": "GASUA",
-      "alternateName": "Gusii All Stars Foundation Kenya",
-      "url": "https://gasua.org",
-      "logo": "https://gasua.org/mpesa-logo.webp",
-      "description": "Registered non-profit charity foundation dedicated to nurturing youth talent, food relief hampers, and school bursaries in Kisii and Nyamira, Kenya.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Kisii Town",
-        "addressRegion": "Kisii County",
-        "addressCountry": "KE"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+254700123456",
-        "contactType": "customer support",
-        "areaServed": "KE",
-        "availableLanguage": ["English", "Swahili"]
-      }
-    }
+    {!! json_encode([
+      '@context' => 'https://schema.org',
+      '@type' => 'NGO',
+      'name' => 'GASUA',
+      'alternateName' => 'Gusii All Stars Foundation Kenya',
+      'url' => 'https://gasua.org',
+      'logo' => asset('mpesa-logo.webp'),
+      'description' => 'Registered non-profit charity foundation dedicated to nurturing youth talent, food relief hampers, and school bursaries in Kisii and Nyamira, Kenya.',
+      'address' => [
+        '@type' => 'PostalAddress',
+        'addressLocality' => 'Kisii Town',
+        'addressRegion' => 'Kisii County',
+        'addressCountry' => 'KE',
+      ],
+      'contactPoint' => [
+        '@type' => 'ContactPoint',
+        'telephone' => '+254700123456',
+        'contactType' => 'customer support',
+        'areaServed' => 'KE',
+        'availableLanguage' => ['English', 'Swahili'],
+      ],
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}
     </script>
-    @endverbatim
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
