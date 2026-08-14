@@ -5,8 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Gusii All Stars Foundation | Empowering Talents & Transforming Lives' }}</title>
-    <meta name="description" content="{{ $metaDescription ?? 'Official website of Gusii All Stars Foundation - Charity, Talent Nurturing, Food Relief, and Scholarships in Kenya.' }}">
+    <!-- High-Ranking SEO Title & Description -->
+    <title>{{ $title ?? 'GASUA - Gusii All Stars Foundation Kenya | Empowering Talents & Community Relief' }}</title>
+    <meta name="description" content="{{ $metaDescription ?? 'GASUA (Gusii All Stars Foundation Kenya) is a registered non-profit charity foundation dedicated to youth talent development, food relief hampers, school bursaries, and community empowerment in Kisii & Nyamira.' }}">
+    <meta name="keywords" content="GASUA, Gusii All Stars Foundation, GASUA Kenya, GASUA Charity, Kisii Foundation, Nyamira Charity, Youth Talent Sponsorship Kenya, M-Pesa Charity Donation, Non-Profit Organization Kisii, Food Relief Kenya">
+    <meta name="author" content="Gusii All Stars Foundation Kenya">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Social Media Sharing -->
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ $title ?? 'GASUA - Gusii All Stars Foundation Kenya' }}">
+    <meta property="og:description" content="{{ $metaDescription ?? 'GASUA (Gusii All Stars Foundation Kenya) empowers youth talents, feeds vulnerable families, and provides education bursaries across Kisii and Nyamira.' }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:site_name" content="GASUA | Gusii All Stars Foundation Kenya">
+    <meta property="og:image" content="{{ asset('mpesa-logo.webp') }}">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GASUA - Gusii All Stars Foundation Kenya">
+    <meta name="twitter:description" content="Empowering youth talents, feeding vulnerable families, and sponsoring bright students in Kisii & Nyamira Counties.">
+
+    <!-- Schema.org JSON-LD Structured Data for Google Ranking -->
+    @verbatim
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NGO",
+      "name": "GASUA",
+      "alternateName": "Gusii All Stars Foundation Kenya",
+      "url": "https://gasua.org",
+      "logo": "https://gasua.org/mpesa-logo.webp",
+      "description": "Registered non-profit charity foundation dedicated to nurturing youth talent, food relief hampers, and school bursaries in Kisii and Nyamira, Kenya.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kisii Town",
+        "addressRegion": "Kisii County",
+        "addressCountry": "KE"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+254700123456",
+        "contactType": "customer support",
+        "areaServed": "KE",
+        "availableLanguage": ["English", "Swahili"]
+      }
+    }
+    </script>
+    @endverbatim
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,14 +109,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 
-                <!-- Logo -->
+                <!-- Logo: GASUA (Gusii All Stars Foundation Kenya) -->
                 <a href="{{ route('home') }}" class="flex items-center gap-3 group">
                     <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-hand-holding-heart"></i>
                     </div>
                     <div>
-                        <span class="font-heading font-extrabold text-xl sm:text-2xl bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-500 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent">GUSII ALL STARS</span>
-                        <span class="block text-[10px] tracking-widest font-bold text-slate-500 dark:text-slate-400 uppercase">Foundation Kenya</span>
+                        <span class="font-heading font-extrabold text-2xl sm:text-3xl tracking-wider bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-500 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent">GASUA</span>
+                        <span class="block text-[10px] tracking-widest font-bold text-slate-500 dark:text-slate-400 uppercase">Gusii All Stars Foundation Kenya</span>
                     </div>
                 </a>
 
@@ -162,10 +209,13 @@
                         <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white text-lg font-bold">
                             <i class="fa-solid fa-hand-holding-heart"></i>
                         </div>
-                        <span class="font-heading font-extrabold text-xl text-white">GUSII ALL STARS</span>
+                        <div>
+                            <span class="font-heading font-extrabold text-2xl text-white tracking-wider">GASUA</span>
+                            <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-widest">Gusii All Stars Foundation Kenya</span>
+                        </div>
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed mb-6">
-                        A registered non-profit charity foundation dedicated to nurturing talent, feeding needy families, sponsoring education, and building community infrastructure across Kisii and Nyamira.
+                        GASUA (Gusii All Stars Foundation Kenya) is a registered non-profit charity organization dedicated to nurturing youth talents, feeding needy families, sponsoring education bursaries, and building community infrastructure across Kisii and Nyamira counties.
                     </p>
                     <div class="flex items-center gap-3 text-slate-400">
                         <a href="#" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center text-xs transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
@@ -179,7 +229,7 @@
                 <div>
                     <h4 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-6">Quick Links</h4>
                     <ul class="space-y-3 text-xs">
-                        <li><a href="{{ route('public.about') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> About Foundation</a></li>
+                        <li><a href="{{ route('public.about') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> About GASUA Foundation</a></li>
                         <li><a href="{{ route('public.campaigns') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> Active Campaigns</a></li>
                         <li><a href="{{ route('public.talents') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> Talent Directory</a></li>
                         <li><a href="{{ route('public.events') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> Upcoming Events</a></li>
@@ -192,7 +242,7 @@
                 <div>
                     <h4 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-6">Pillars of Impact</h4>
                     <ul class="space-y-3 text-xs">
-                        <li><a href="{{ route('public.programs') }}" class="hover:text-emerald-400 transition-colors">Talent Development Academy</a></li>
+                        <li><a href="{{ route('public.programs') }}" class="hover:text-emerald-400 transition-colors">Youth Talent Development Academy</a></li>
                         <li><a href="{{ route('public.programs') }}" class="hover:text-emerald-400 transition-colors">School Meal Feeding Program</a></li>
                         <li><a href="{{ route('public.programs') }}" class="hover:text-emerald-400 transition-colors">Girl Child High School Bursaries</a></li>
                         <li><a href="{{ route('public.programs') }}" class="hover:text-emerald-400 transition-colors">Community Free Medical Outreach</a></li>
@@ -203,7 +253,7 @@
                 <!-- Col 4: Newsletter -->
                 <div>
                     <h4 class="font-heading font-bold text-white text-sm uppercase tracking-wider mb-6">Stay Updated</h4>
-                    <p class="text-xs text-slate-400 mb-4">Subscribe to receive monthly foundation impact reports and campaign updates.</p>
+                    <p class="text-xs text-slate-400 mb-4">Subscribe to receive monthly GASUA foundation impact reports and campaign updates.</p>
                     <form action="#" method="POST" class="flex flex-col gap-2">
                         @csrf
                         <input type="email" placeholder="Enter your email address" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
@@ -215,7 +265,7 @@
 
             <!-- Bottom Copyright & Payment Badges -->
             <div class="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-                <p>&copy; {{ date('Y') }} Gusii All Stars Foundation. All rights reserved. Built with excellence.</p>
+                <p>&copy; {{ date('Y') }} GASUA (Gusii All Stars Foundation Kenya). All rights reserved. Built with excellence.</p>
                 <div class="flex items-center gap-4 text-slate-400 text-lg">
                     <span class="text-xs font-semibold text-slate-500">Accepted Payments:</span>
                     <img src="{{ asset('mpesa-logo.webp') }}" alt="M-Pesa" class="h-5 w-auto object-contain">

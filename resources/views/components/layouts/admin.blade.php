@@ -32,8 +32,8 @@
                 <i class="fa-solid fa-shield-heart"></i>
             </div>
             <div>
-                <span class="font-heading font-extrabold text-lg text-white">GUSII ADMIN</span>
-                <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Foundation Portal</span>
+                <span class="font-heading font-extrabold text-lg text-white tracking-wider">GASUA ADMIN</span>
+                <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Gusii All Stars Foundation</span>
             </div>
         </div>
 

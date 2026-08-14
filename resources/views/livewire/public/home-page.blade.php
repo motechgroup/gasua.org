@@ -9,7 +9,7 @@
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6 animate-pulse">
-                <i class="fa-solid fa-heart-pulse"></i> Gusii All Stars Foundation Kenya
+                <i class="fa-solid fa-heart-pulse"></i> GASUA - Gusii All Stars Foundation Kenya
             </div>
             
             <h1 class="font-heading font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-none mb-6">
