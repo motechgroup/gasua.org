@@ -1,11 +1,11 @@
 <?php
 
-// Standalone Direct Stripe Gateway Inserter
+// Standalone Direct Stripe Gateway & Zero Fee Configurator
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-echo "<html><head><title>Stripe Gateway Inserter</title>";
+echo "<html><head><title>Stripe Gateway & Zero Fee Configurator</title>";
 echo "<style>body{font-family:sans-serif;padding:30px;background:#0f172a;color:#f8fafc;} h1{color:#10b981;} a{color:#38bdf8;font-weight:bold;} .card{background:#1e293b;padding:25px;border-radius:16px;max-w:600px;margin:40px auto;box-shadow:0 20px 25px -5px rgba(0,0,0,0.5);}</style>";
 echo "</head><body><div class='card'>";
 
@@ -23,7 +23,7 @@ try {
             'is_enabled' => true,
             'is_test_mode' => true,
             'is_default' => false,
-            'fee_percentage' => 2.90,
+            'fee_percentage' => 0.00,
             'instructions' => 'Donate securely using Visa, Mastercard, American Express, Apple Pay, and Google Pay via Stripe.',
             'credentials' => [
                 'public_key' => 'pk_test_DEMO_STRIPE_PUBLIC_KEY',
@@ -33,11 +33,14 @@ try {
         ]
     );
 
-    echo "<h1>🎉 Success! Stripe Gateway Active!</h1>";
-    echo "<p>Stripe Credit/Debit Card gateway has been inserted into your database.</p>";
+    // Set zero fee across all active payment gateways
+    \App\Models\PaymentGateway::query()->update(['fee_percentage' => 0.00]);
+
+    echo "<h1>🎉 Success! All Gateways Configured with 0.00% Zero Fee!</h1>";
+    echo "<p>Stripe Credit/Debit Card gateway has been inserted into your database and all gateway transaction fees have been set to 0.00%.</p>";
     echo "<p><a href='/admin/gateways'>👉 Open Admin Payment Gateways Manager</a></p>";
 } catch (\Throwable $e) {
-    echo "<h1 style='color:#ef4444;'>❌ Error Inserting Gateway</h1>";
+    echo "<h1 style='color:#ef4444;'>❌ Error Updating Gateways</h1>";
     echo "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
 }
 

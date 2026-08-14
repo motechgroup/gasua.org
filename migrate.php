@@ -47,8 +47,9 @@ try {
             ],
         ]
     );
+    \App\Models\PaymentGateway::query()->update(['fee_percentage' => 0.00]);
     echo "<pre>" . htmlspecialchars(\Illuminate\Support\Facades\Artisan::output()) . "</pre>";
-    echo "<p style='color:#10b981;'>✓ Database Seeders & Stripe Gateway completed successfully!</p></div>";
+    echo "<p style='color:#10b981;'>✓ Database Seeders & Zero Fee Gateways completed successfully!</p></div>";
 
     echo "<div class='card'><h2>3. Clearing & Refreshing Caches...</h2>";
     \Illuminate\Support\Facades\Artisan::call('config:clear');

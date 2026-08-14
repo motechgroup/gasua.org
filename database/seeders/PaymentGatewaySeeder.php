@@ -23,7 +23,7 @@ class PaymentGatewaySeeder extends Seeder
                     'consumer_secret' => 'DEMO_MPESA_CONSUMER_SECRET',
                     'passkey' => 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919',
                     'shortcode' => '174379',
-                    'headdb_type' => 'paybill', // paybill or till
+                    'headdb_type' => 'paybill',
                 ],
             ],
             [
@@ -32,7 +32,7 @@ class PaymentGatewaySeeder extends Seeder
                 'is_enabled' => true,
                 'is_test_mode' => true,
                 'is_default' => false,
-                'fee_percentage' => 1.50,
+                'fee_percentage' => 0.00,
                 'instructions' => 'Pay via Visa, Mastercard, Airtel Money, MTN Mobile Money or Bank Transfer.',
                 'credentials' => [
                     'public_key' => 'FLWPUBK_TEST-DEMO_KEY-X',
@@ -47,11 +47,11 @@ class PaymentGatewaySeeder extends Seeder
                 'is_enabled' => true,
                 'is_test_mode' => true,
                 'is_default' => false,
-                'fee_percentage' => 2.00,
+                'fee_percentage' => 0.00,
                 'instructions' => 'East Africa regional card and mobile wallet checkout portal.',
                 'credentials' => [
                     'company_token' => 'DEMO_DPO_COMPANY_TOKEN',
-                    'service_type' => '3854', // Standard Charity Service Type
+                    'service_type' => '3854',
                 ],
             ],
             [
@@ -60,7 +60,7 @@ class PaymentGatewaySeeder extends Seeder
                 'is_enabled' => true,
                 'is_test_mode' => true,
                 'is_default' => false,
-                'fee_percentage' => 3.50,
+                'fee_percentage' => 0.00,
                 'instructions' => 'Donate securely using your PayPal account or Debit/Credit card globally.',
                 'credentials' => [
                     'client_id' => 'DEMO_PAYPAL_CLIENT_ID',
@@ -73,7 +73,7 @@ class PaymentGatewaySeeder extends Seeder
                 'is_enabled' => true,
                 'is_test_mode' => true,
                 'is_default' => false,
-                'fee_percentage' => 0.50,
+                'fee_percentage' => 0.00,
                 'instructions' => 'Donate using Bitcoin (BTC), Ethereum (ETH), USDT, USDC, Solana (SOL) & 300+ cryptocurrencies.',
                 'credentials' => [
                     'api_key' => 'DEMO_NOWPAYMENTS_API_KEY',
@@ -86,7 +86,7 @@ class PaymentGatewaySeeder extends Seeder
                 'is_enabled' => true,
                 'is_test_mode' => true,
                 'is_default' => false,
-                'fee_percentage' => 2.90,
+                'fee_percentage' => 0.00,
                 'instructions' => 'Donate securely using Visa, Mastercard, American Express, Apple Pay, and Google Pay via Stripe.',
                 'credentials' => [
                     'public_key' => 'pk_test_DEMO_STRIPE_PUBLIC_KEY',
@@ -99,5 +99,8 @@ class PaymentGatewaySeeder extends Seeder
         foreach ($gateways as $gw) {
             PaymentGateway::updateOrCreate(['code' => $gw['code']], $gw);
         }
+
+        // Force zero fee across all existing gateways
+        PaymentGateway::query()->update(['fee_percentage' => 0.00]);
     }
 }

@@ -14,9 +14,9 @@ class DonationService
     public function createPendingDonation(array $data): Donation
     {
         $gateway = PaymentGateway::where('code', $data['gateway_code'] ?? 'mpesa')->first();
-        $feePct = $gateway ? $gateway->fee_percentage : 0.00;
-        $feeAmount = ($data['amount'] * $feePct) / 100;
-        $netAmount = max(0, $data['amount'] - $feeAmount);
+        $feePct = 0.00;
+        $feeAmount = 0.00;
+        $netAmount = $data['amount'];
 
         $ref = 'GAS-DON-' . strtoupper(Str::random(8));
 
