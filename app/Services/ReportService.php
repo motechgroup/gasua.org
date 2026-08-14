@@ -41,9 +41,14 @@ class ReportService
 
     public function getMonthlyTrends(): array
     {
+        $driver = DB::getDriverName();
+        $dateExpr = $driver === 'sqlite'
+            ? "strftime('%Y-%m', created_at)"
+            : "DATE_FORMAT(created_at, '%Y-%m')";
+
         $donations = Donation::where('payment_status', 'completed')
             ->select(
-                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month_year'),
+                DB::raw("{$dateExpr} as month_year"),
                 DB::raw('SUM(amount) as total_amount'),
                 DB::raw('COUNT(*) as total_count')
             )
