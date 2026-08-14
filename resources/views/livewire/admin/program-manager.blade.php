@@ -66,7 +66,7 @@
                     <div>
                         <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Program Title <span class="text-rose-500">*</span></label>
                         <input type="text" wire:model="title" placeholder="e.g. High School Bursary Program" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        @error('title') <span class="text-rose-500 text-[10px] mt-1">{{ $message }}</span> @error
+                        @error('title') <span class="text-rose-500 text-[10px] mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
