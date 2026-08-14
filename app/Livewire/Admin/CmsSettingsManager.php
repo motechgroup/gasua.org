@@ -56,11 +56,15 @@ class CmsSettingsManager extends Component
         try {
             $basePath = base_path();
 
-            // 1. Git pull
-            $gitResult = Process::path($basePath)->run('git pull origin main 2>&1');
-            $this->deployOutput .= "[1/4] GIT PULL:\n" . $gitResult->output() . "\n";
+            // 1. Git pull (safely check if exec is allowed)
+            if (function_exists('exec')) {
+                $gitResult = Process::path($basePath)->run('git pull origin main 2>&1');
+                $this->deployOutput .= "[1/4] GIT PULL:\n" . $gitResult->output() . "\n";
+            } else {
+                $this->deployOutput .= "[1/4] GIT PULL:\n(PHP exec() is disabled on this shared host. Migrations & cache clearing will run natively via PHP Artisan).\n\n";
+            }
 
-            // 2. Run Database Migrations
+            // 2. Run Database Migrations natively via Artisan
             Artisan::call('migrate', ['--force' => true]);
             $this->deployOutput .= "[2/4] MIGRATIONS:\n" . Artisan::output() . "\n";
 
@@ -72,15 +76,19 @@ class CmsSettingsManager extends Component
 
             // 4. Storage Link check
             if (!file_exists(public_path('storage'))) {
-                Artisan::call('storage:link');
-                $this->deployOutput .= "[4/4] STORAGE LINK:\nPublic storage symlink created.\n";
+                if (function_exists('symlink')) {
+                    Artisan::call('storage:link');
+                    $this->deployOutput .= "[4/4] STORAGE LINK:\nPublic storage symlink created.\n";
+                } else {
+                    $this->deployOutput .= "[4/4] STORAGE LINK:\nSymlink function restricted.\n";
+                }
             } else {
                 $this->deployOutput .= "[4/4] STORAGE LINK:\nStorage link exists.\n";
             }
 
-            $this->deployOutput .= "\n✅ DEPLOYMENT COMPLETED SUCCESSFULLY AT " . date('Y-m-d H:i:s T');
+            $this->deployOutput .= "\n✅ DEPLOYMENT & MIGRATION TASK COMPLETED SUCCESSFULLY AT " . date('Y-m-d H:i:s T');
         } catch (\Exception $e) {
-            $this->deployOutput .= "\n❌ ERROR DURING DEPLOYMENT: " . $e->getMessage();
+            $this->deployOutput .= "\n❌ ERROR: " . $e->getMessage();
         } finally {
             $this->isDeploying = false;
         }

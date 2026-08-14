@@ -23,11 +23,15 @@ class DeployWebhookController extends Controller
         $logs = [];
 
         try {
-            // 1. Git pull
-            $gitResult = Process::path($basePath)->run('git pull origin main 2>&1');
-            $logs[] = "GIT PULL:\n" . $gitResult->output();
+            // 1. Git pull if exec is enabled
+            if (function_exists('exec')) {
+                $gitResult = Process::path($basePath)->run('git pull origin main 2>&1');
+                $logs[] = "GIT PULL:\n" . $gitResult->output();
+            } else {
+                $logs[] = "GIT PULL: Skipped (PHP exec function disabled on shared host)";
+            }
 
-            // 2. Run Database Migrations
+            // 2. Run Database Migrations natively via Artisan
             Artisan::call('migrate', ['--force' => true]);
             $logs[] = "MIGRATIONS:\n" . Artisan::output();
 
@@ -39,12 +43,14 @@ class DeployWebhookController extends Controller
 
             // 4. Storage Link check
             if (!file_exists(public_path('storage'))) {
-                Artisan::call('storage:link');
+                if (function_exists('symlink')) {
+                    Artisan::call('storage:link');
+                }
             }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Shared hosting code pull & migrations executed successfully.',
+                'message' => 'Shared hosting migration & cache refresh executed successfully.',
                 'logs' => $logs,
             ]);
         } catch (\Exception $e) {
