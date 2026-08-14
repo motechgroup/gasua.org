@@ -79,24 +79,11 @@
 
         <!-- Sidebar Actions (1 Col) -->
         <div class="space-y-8">
-            <!-- Donation Progress Box -->
+            <!-- Donation Box -->
             <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6 sticky top-28">
                 <div>
-                    <div class="text-3xl font-extrabold font-heading text-emerald-600 dark:text-emerald-400">
-                        KES {{ number_format($campaign->raised_amount, 2) }}
-                    </div>
-                    <div class="text-xs font-semibold text-slate-500 mt-1">
-                        raised of <strong>KES {{ number_format($campaign->goal_amount, 2) }}</strong> target
-                    </div>
-                </div>
-
-                <div class="w-full h-3 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                    <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400" style="width: {{ $campaign->progress_percentage }}%;"></div>
-                </div>
-
-                <div class="flex justify-between text-xs font-bold text-slate-600 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
-                    <span><i class="fa-solid fa-users text-emerald-500 mr-1"></i> {{ $campaign->donors_count }} Donors</span>
-                    <span><i class="fa-solid fa-chart-line text-emerald-500 mr-1"></i> {{ $campaign->progress_percentage }}% Funded</span>
+                    <h3 class="font-heading font-bold text-xl text-slate-900 dark:text-white">Support This Initiative</h3>
+                    <p class="text-xs text-slate-500 mt-1">100% of your contribution directly funds this project.</p>
                 </div>
 
                 <a href="{{ route('public.donate', ['campaign' => $campaign->id]) }}" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-xs shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-2">

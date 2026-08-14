@@ -24,7 +24,7 @@
         @forelse($campaigns as $campaign)
             <div class="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all flex flex-col justify-between group">
                 <div>
-                    <div class="relative h-52 overflow-hidden">
+                    <div class="relative h-56 overflow-hidden">
                         <img src="{{ $campaign->cover_image ?? 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80' }}" alt="{{ $campaign->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-wider shadow">
                             {{ $campaign->category }}
@@ -35,24 +35,13 @@
                         <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white line-clamp-2 mb-2 group-hover:text-emerald-600 transition-colors">
                             <a href="{{ route('public.campaigns.show', $campaign->slug) }}">{{ $campaign->title }}</a>
                         </h3>
-                        <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-3 mb-4 leading-relaxed">{{ $campaign->summary }}</p>
-
-                        <div class="mb-4">
-                            <div class="flex justify-between text-xs font-bold mb-1">
-                                <span class="text-emerald-600 dark:text-emerald-400">Raised: KES {{ number_format($campaign->raised_amount, 2) }}</span>
-                                <span class="text-slate-500">Goal: KES {{ number_format($campaign->goal_amount, 2) }}</span>
-                            </div>
-                            <div class="w-full h-2.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                                <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400" style="width: {{ $campaign->progress_percentage }}%;"></div>
-                            </div>
-                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">{{ $campaign->summary }}</p>
                     </div>
                 </div>
 
-                <div class="p-6 pt-0 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80 mt-2 text-xs font-bold">
-                    <span class="text-slate-500"><i class="fa-solid fa-users text-emerald-500 mr-1"></i> {{ $campaign->donors_count }} Donors</span>
-                    <a href="{{ route('public.donate', ['campaign' => $campaign->id]) }}" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-colors">
-                        Donate Now
+                <div class="p-6 pt-0 border-t border-slate-100 dark:border-slate-800/80 mt-2">
+                    <a href="{{ route('public.donate', ['campaign' => $campaign->id]) }}" class="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-heart text-rose-300"></i> Donate Now
                     </a>
                 </div>
             </div>
