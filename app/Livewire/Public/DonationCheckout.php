@@ -15,6 +15,7 @@ class DonationCheckout extends Component
     public $campaign_id = null;
     public $talent_id = null;
     public $p2p_fundraiser_id = null;
+    public $program_id = null;
 
     public $amount = 1000;
     public $custom_amount = '';
@@ -46,6 +47,7 @@ class DonationCheckout extends Component
         $this->campaign_id = request()->query('campaign');
         $this->talent_id = request()->query('talent');
         $this->p2p_fundraiser_id = request()->query('p2p');
+        $this->program_id = request()->query('program');
 
         $ref = request()->query('reference');
         $sessionId = request()->query('session_id');
@@ -181,11 +183,13 @@ class DonationCheckout extends Component
         $enabledGateways = PaymentGateway::where('is_enabled', true)->get();
         $selectedCampaign = $this->campaign_id ? Campaign::find($this->campaign_id) : null;
         $selectedTalent = $this->talent_id ? Talent::find($this->talent_id) : null;
+        $selectedProgram = $this->program_id ? \App\Models\Program::find($this->program_id) : null;
 
         return view('livewire.public.donation-checkout', [
             'gateways' => $enabledGateways,
             'selectedCampaign' => $selectedCampaign,
             'selectedTalent' => $selectedTalent,
+            'selectedProgram' => $selectedProgram,
         ])->layout('components.layouts.app');
     }
 }

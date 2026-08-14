@@ -107,15 +107,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 
-                <!-- Logo: GASUA (Gusii All Stars Foundation Kenya) -->
+                <!-- Logo: GASUA (G★ Logo) -->
                 <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-hand-holding-heart"></i>
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 flex items-center justify-center text-white font-black shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition-transform relative">
+                        <span class="font-heading text-2xl font-black tracking-tight drop-shadow-sm">G</span>
+                        <i class="fa-solid fa-star text-[10px] text-amber-300 absolute top-1.5 right-1.5"></i>
                     </div>
-                    <div>
-                        <span class="font-heading font-extrabold text-2xl sm:text-3xl tracking-wider bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-500 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent">GASUA</span>
-                        <span class="block text-[10px] tracking-widest font-bold text-slate-500 dark:text-slate-400 uppercase">Gusii All Stars Foundation Kenya</span>
-                    </div>
+                    <span class="font-heading font-black text-2xl sm:text-3xl tracking-wider bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-500 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent">GASUA</span>
                 </a>
 
                 <!-- Desktop Navigation Links -->
@@ -202,13 +200,11 @@
                 <!-- Col 1: About -->
                 <div>
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white text-lg font-bold">
-                            <i class="fa-solid fa-hand-holding-heart"></i>
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-black shadow-lg relative">
+                            <span class="font-heading text-xl font-black tracking-tight">G</span>
+                            <i class="fa-solid fa-star text-[8px] text-amber-300 absolute top-1.5 right-1.5"></i>
                         </div>
-                        <div>
-                            <span class="font-heading font-extrabold text-2xl text-white tracking-wider">GASUA</span>
-                            <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-widest">Gusii All Stars Foundation Kenya</span>
-                        </div>
+                        <span class="font-heading font-black text-2xl text-white tracking-wider">GASUA</span>
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed mb-6">
                         GASUA (Gusii All Stars Foundation Kenya) is a registered non-profit charity organization dedicated to nurturing youth talents, feeding needy families, sponsoring education bursaries, and building community infrastructure across Kisii and Nyamira counties.

@@ -28,12 +28,12 @@
     <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800 hidden md:flex">
         <!-- Sidebar Brand -->
         <div class="h-20 px-6 flex items-center gap-3 border-b border-slate-800">
-            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                <i class="fa-solid fa-shield-heart"></i>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-white flex items-center justify-center font-black relative shadow-lg">
+                <span class="font-heading text-xl font-black">G</span>
+                <i class="fa-solid fa-star text-[8px] text-amber-300 absolute top-1.5 right-1.5"></i>
             </div>
             <div>
                 <span class="font-heading font-extrabold text-lg text-white tracking-wider">GASUA ADMIN</span>
-                <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Gusii All Stars Foundation</span>
             </div>
         </div>
 
@@ -44,6 +44,9 @@
             </a>
             <a href="{{ route('admin.campaigns') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-emerald-400 transition-colors {{ request()->routeIs('admin.campaigns') ? 'bg-emerald-600 text-white hover:bg-emerald-600 hover:text-white font-bold' : '' }}">
                 <i class="fa-solid fa-bullhorn text-base"></i> Campaigns
+            </a>
+            <a href="{{ route('admin.programs') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-emerald-400 transition-colors {{ request()->routeIs('admin.programs') ? 'bg-emerald-600 text-white hover:bg-emerald-600 hover:text-white font-bold' : '' }}">
+                <i class="fa-solid fa-graduation-cap text-base"></i> Foundation Programs
             </a>
             <a href="{{ route('admin.donations') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-emerald-400 transition-colors {{ request()->routeIs('admin.donations') ? 'bg-emerald-600 text-white hover:bg-emerald-600 hover:text-white font-bold' : '' }}">
                 <i class="fa-solid fa-hand-holding-dollar text-base"></i> Donations

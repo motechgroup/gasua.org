@@ -109,6 +109,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/volunteers', VolunteerManager::class)->name('admin.volunteers');
     Route::get('/events', \App\Livewire\Public\EventsIndex::class)->name('admin.events');
     Route::get('/talents', \App\Livewire\Public\TalentDirectory::class)->name('admin.talents');
+    Route::get('/programs', \App\Livewire\Admin\ProgramManager::class)->name('admin.programs');
     Route::get('/reports', FinancialReports::class)->name('admin.reports');
     Route::get('/transparency', TransparencyManager::class)->name('admin.transparency');
     Route::get('/users', UserManager::class)->name('admin.users');

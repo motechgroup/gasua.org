@@ -58,6 +58,10 @@
                     <div class="mt-4 p-4 rounded-2xl bg-teal-50 dark:bg-teal-950/50 border border-teal-200 dark:border-teal-800 text-xs text-teal-800 dark:text-teal-300 font-semibold">
                         <i class="fa-solid fa-star mr-2"></i> Sponsoring Talent: <strong>{{ $selectedTalent->name }}</strong>
                     </div>
+                @elseif($selectedProgram)
+                    <div class="mt-4 p-4 rounded-2xl bg-cyan-50 dark:bg-cyan-950/50 border border-cyan-200 dark:border-cyan-800 text-xs text-cyan-800 dark:text-cyan-300 font-semibold">
+                        <i class="fa-solid fa-{{ $selectedProgram->icon ?: 'graduation-cap' }} mr-2"></i> Supporting Program: <strong>{{ $selectedProgram->title }}</strong>
+                    </div>
                 @endif
             </div>
 
