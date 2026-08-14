@@ -31,8 +31,24 @@ try {
 
     echo "<div class='card'><h2>2. Running Database Seeders...</h2>";
     \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+    \App\Models\PaymentGateway::updateOrCreate(
+        ['code' => 'stripe'],
+        [
+            'name' => 'Stripe Credit/Debit Cards',
+            'is_enabled' => true,
+            'is_test_mode' => true,
+            'is_default' => false,
+            'fee_percentage' => 2.90,
+            'instructions' => 'Donate securely using Visa, Mastercard, American Express, Apple Pay, and Google Pay via Stripe.',
+            'credentials' => [
+                'public_key' => 'pk_test_DEMO_STRIPE_PUBLIC_KEY',
+                'secret_key' => 'sk_test_DEMO_STRIPE_SECRET_KEY',
+                'webhook_secret' => 'whsec_DEMO_STRIPE_WEBHOOK_SECRET',
+            ],
+        ]
+    );
     echo "<pre>" . htmlspecialchars(\Illuminate\Support\Facades\Artisan::output()) . "</pre>";
-    echo "<p style='color:#10b981;'>✓ Database Seeders completed successfully!</p></div>";
+    echo "<p style='color:#10b981;'>✓ Database Seeders & Stripe Gateway completed successfully!</p></div>";
 
     echo "<div class='card'><h2>3. Clearing & Refreshing Caches...</h2>";
     \Illuminate\Support\Facades\Artisan::call('config:clear');
