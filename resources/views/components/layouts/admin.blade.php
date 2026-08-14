@@ -101,11 +101,11 @@
 
                 <div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-800">
                     <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
-                        {{ strtoupper(substr(auth()->user()->name ?? 'SA', 0, 2)) }}
+                        {{ strtoupper(substr(auth()->user()?->name ?? 'SA', 0, 2)) }}
                     </div>
                     <div class="hidden sm:block text-xs">
-                        <span class="font-bold block text-slate-800 dark:text-slate-200">{{ auth()->user()->name ?? 'Administrator' }}</span>
-                        <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase">{{ auth()->user()->roles->first()?->name ?? 'Staff' }}</span>
+                        <span class="font-bold block text-slate-800 dark:text-slate-200">{{ auth()->user()?->name ?? 'Administrator' }}</span>
+                        <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase">{{ auth()->user()?->roles?->first()?->name ?? 'Super Admin' }}</span>
                     </div>
                 </div>
             </div>
