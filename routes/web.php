@@ -107,8 +107,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/gateways', PaymentGatewaySettings::class)->name('admin.gateways');
     Route::get('/logs', PaymentLogsViewer::class)->name('admin.logs');
     Route::get('/volunteers', VolunteerManager::class)->name('admin.volunteers');
-    Route::get('/events', \App\Livewire\Public\EventsIndex::class)->name('admin.events');
-    Route::get('/talents', \App\Livewire\Public\TalentDirectory::class)->name('admin.talents');
+    Route::get('/events', \App\Livewire\Admin\EventManager::class)->name('admin.events');
+    Route::get('/talents', \App\Livewire\Admin\TalentManager::class)->name('admin.talents');
     Route::get('/programs', \App\Livewire\Admin\ProgramManager::class)->name('admin.programs');
     Route::get('/reports', FinancialReports::class)->name('admin.reports');
     Route::get('/transparency', TransparencyManager::class)->name('admin.transparency');
