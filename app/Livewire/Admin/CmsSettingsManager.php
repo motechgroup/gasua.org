@@ -122,9 +122,10 @@ class CmsSettingsManager extends Component
                 $this->deployOutput .= "PHP exec() disabled on server. Latest Commit: [" . ($this->latestCommitHash ?: 'HEAD') . "] " . ($this->latestCommitMessage ?: 'Main Branch') . "\n\n";
             }
 
-            // 2. Database Migrations
+            // 2. Database Migrations & Gateway Seeding
             Artisan::call('migrate', ['--force' => true]);
-            $this->deployOutput .= "[2/3] MIGRATIONS:\n" . (Artisan::output() ?: "Database schema up to date.\n") . "\n";
+            app(\Database\Seeders\PaymentGatewaySeeder::class)->run();
+            $this->deployOutput .= "[2/3] MIGRATIONS & SEEDERS:\n" . (Artisan::output() ?: "Database schema and payment gateways seeded successfully.\n") . "\n";
 
             // 3. Clear Cache Lightweight
             Artisan::call('view:clear');

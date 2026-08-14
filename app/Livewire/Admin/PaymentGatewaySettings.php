@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\PaymentGateway;
+use Database\Seeders\PaymentGatewaySeeder;
 
 class PaymentGatewaySettings extends Component
 {
@@ -17,6 +18,18 @@ class PaymentGatewaySettings extends Component
     public $credentials = [];
 
     public $savedMessage = false;
+
+    public function mount()
+    {
+        $this->ensureGatewaysSeeded();
+    }
+
+    public function ensureGatewaysSeeded()
+    {
+        if (!PaymentGateway::where('code', 'stripe')->exists()) {
+            app(PaymentGatewaySeeder::class)->run();
+        }
+    }
 
     public function editGateway($code)
     {
@@ -71,7 +84,9 @@ class PaymentGatewaySettings extends Component
 
     public function render()
     {
+        $this->ensureGatewaysSeeded();
         $gateways = PaymentGateway::all();
+
         return view('livewire.admin.payment-gateway-settings', [
             'gateways' => $gateways,
         ])->layout('components.layouts.admin', ['headerTitle' => 'Payment Gateway Configurator']);
