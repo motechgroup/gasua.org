@@ -19,9 +19,9 @@ class DonationCheckout extends Component
     public $amount = 1000;
     public $custom_amount = '';
     public $currency = 'KES';
-    public $donation_type = 'campaign'; // general, campaign, talent, memorial
+    public $donation_type = 'campaign';
     public $is_recurring = false;
-    public $recurring_frequency = 'none'; // monthly, annual
+    public $recurring_frequency = 'none';
 
     public $donor_name = '';
     public $donor_email = '';
@@ -31,7 +31,7 @@ class DonationCheckout extends Component
     public $is_anonymous = false;
     public $dedication_name = '';
 
-    public $gateway_code = 'mpesa';
+    public $gateway_code = ''; // Unselected by default so form reveals cleanly on gateway click
     public $crypto_coin = 'usdttrc20';
 
     // State after initiation
@@ -74,20 +74,45 @@ class DonationCheckout extends Component
         $this->custom_amount = '';
     }
 
+    public function selectGateway($code)
+    {
+        $this->gateway_code = $code;
+        $this->errorMessage = '';
+    }
+
     public function processDonation()
     {
         $finalAmount = !empty($this->custom_amount) ? (float)$this->custom_amount : (float)$this->amount;
 
-        $this->validate([
-            'donor_name' => $this->is_anonymous ? 'nullable' : 'required|string|max:100',
-            'donor_email' => 'required|email',
-            'donor_phone' => $this->gateway_code === 'mpesa' ? 'required|string' : 'nullable|string',
-            'gateway_code' => 'required|string',
-        ]);
+        if (empty($this->gateway_code)) {
+            $this->errorMessage = 'Please choose a payment gateway to complete your donation.';
+            return;
+        }
 
         if ($finalAmount <= 0) {
-            $this->errorMessage = 'Please enter a valid donation amount.';
+            $this->errorMessage = 'Please select or enter a valid donation amount.';
             return;
+        }
+
+        // Custom validation per gateway
+        if ($this->gateway_code === 'mpesa') {
+            $this->validate([
+                'donor_phone' => 'required|string|min:9',
+            ], [
+                'donor_phone.required' => 'Please enter your M-Pesa mobile number to receive the STK Push prompt.',
+            ]);
+
+            $donorName = !empty($this->donor_name) ? $this->donor_name : ($this->is_anonymous ? 'Anonymous Donor' : 'M-Pesa Donor');
+            $donorEmail = !empty($this->donor_email) ? $this->donor_email : 'donor@gusiiallstars.org';
+        } else {
+            $this->validate([
+                'donor_email' => 'required|email',
+            ], [
+                'donor_email.required' => 'Please enter your email address to receive your official PDF receipt.',
+            ]);
+
+            $donorName = !empty($this->donor_name) ? $this->donor_name : ($this->is_anonymous ? 'Anonymous Donor' : 'Kind Donor');
+            $donorEmail = $this->donor_email;
         }
 
         try {
@@ -101,8 +126,8 @@ class DonationCheckout extends Component
                 'campaign_id' => $this->campaign_id,
                 'talent_id' => $this->talent_id,
                 'p2p_fundraiser_id' => $this->p2p_fundraiser_id,
-                'donor_name' => $this->donor_name,
-                'donor_email' => $this->donor_email,
+                'donor_name' => $donorName,
+                'donor_email' => $donorEmail,
                 'donor_phone' => $this->donor_phone,
                 'donor_country' => $this->donor_country,
                 'donor_message' => $this->donor_message,
@@ -131,7 +156,7 @@ class DonationCheckout extends Component
             }
 
         } catch (\Exception $e) {
-            $this->errorMessage = 'Donation initialization error: ' . $e->getMessage();
+            $this->errorMessage = 'Donation processing error: ' . $e->getMessage();
         } finally {
             $this->isProcessing = false;
         }

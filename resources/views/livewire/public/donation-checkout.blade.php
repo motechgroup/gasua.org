@@ -1,4 +1,4 @@
-<div class="py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
     @if($isSuccess && $activeDonation)
         <!-- SUCCESS STATE & RECEIPT DOWNLOAD -->
@@ -41,10 +41,10 @@
 
     @else
 
-        <!-- DONATION CHECKOUT FORM -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-2xl">
+        <!-- CLEAN & SIMPLE DONATION CHECKOUT -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-8">
             
-            <div class="text-center mb-8">
+            <div class="text-center">
                 <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold uppercase tracking-widest">
                     Secure 256-Bit SSL Checkout
                 </span>
@@ -62,7 +62,7 @@
             </div>
 
             @if($errorMessage)
-                <div class="mb-6 p-4 rounded-2xl bg-rose-50 dark:bg-rose-950 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold">
+                <div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold">
                     <i class="fa-solid fa-circle-exclamation mr-2"></i> {{ $errorMessage }}
                 </div>
             @endif
@@ -71,16 +71,16 @@
                 
                 <!-- 1. Frequency Selection -->
                 <div>
-                    <label class="block text-xs font-extrabold uppercase text-slate-500 mb-3">Donation Frequency</label>
+                    <label class="block text-xs font-extrabold uppercase text-slate-500 mb-3">1. Select Donation Frequency</label>
                     <div class="grid grid-cols-3 gap-3 text-xs font-bold">
                         <button type="button" @click="$wire.set('is_recurring', false)" class="py-3 px-4 rounded-2xl border text-center transition-all" :class="!$wire.is_recurring ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'">
                             One-Time
                         </button>
                         <button type="button" @click="$wire.set('is_recurring', true); $wire.set('recurring_frequency', 'monthly')" class="py-3 px-4 rounded-2xl border text-center transition-all" :class="$wire.is_recurring && $wire.recurring_frequency === 'monthly' ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'">
-                            Monthly Recurring
+                            Monthly
                         </button>
                         <button type="button" @click="$wire.set('is_recurring', true); $wire.set('recurring_frequency', 'annual')" class="py-3 px-4 rounded-2xl border text-center transition-all" :class="$wire.is_recurring && $wire.recurring_frequency === 'annual' ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'">
-                            Annual Recurring
+                            Annual
                         </button>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                 <!-- 2. Preset Amounts -->
                 <div>
                     <div class="flex justify-between items-center mb-3">
-                        <label class="block text-xs font-extrabold uppercase text-slate-500">Select Donation Amount</label>
+                        <label class="block text-xs font-extrabold uppercase text-slate-500">2. Select Amount</label>
                         <div class="flex gap-2 text-xs">
                             <button type="button" @click="$wire.set('currency', 'KES')" class="px-2.5 py-1 rounded-lg font-bold" :class="$wire.currency === 'KES' ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900' : 'text-slate-500'">KES (KSh)</button>
                             <button type="button" @click="$wire.set('currency', 'USD')" class="px-2.5 py-1 rounded-lg font-bold" :class="$wire.currency === 'USD' ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900' : 'text-slate-500'">USD ($)</button>
@@ -106,15 +106,14 @@
                     <input type="number" wire:model.live="custom_amount" placeholder="Or enter custom amount..." class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                 </div>
 
-                <!-- 3. Payment Gateway Selection -->
+                <!-- 3. Choose Payment Gateway -->
                 <div>
-                    <label class="block text-xs font-extrabold uppercase text-slate-500 mb-3">Choose Payment Gateway</label>
+                    <label class="block text-xs font-extrabold uppercase text-slate-500 mb-3">3. Choose Payment Method</label>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         @foreach($gateways as $gw)
-                            <label class="relative flex items-center p-4 rounded-2xl border cursor-pointer transition-all" :class="$wire.gateway_code === '{{ $gw->code }}' ? 'bg-emerald-50/60 dark:bg-emerald-950/60 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700'">
-                                <input type="radio" wire:model.live="gateway_code" value="{{ $gw->code }}" class="sr-only">
+                            <button type="button" wire:click="selectGateway('{{ $gw->code }}')" class="relative flex items-center p-4 rounded-2xl border cursor-pointer transition-all text-left" :class="$wire.gateway_code === '{{ $gw->code }}' ? 'bg-emerald-50/80 dark:bg-emerald-950/80 border-emerald-500 shadow-lg ring-2 ring-emerald-500/20' : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 hover:border-emerald-400'">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-lg text-emerald-600">
+                                    <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-lg text-emerald-600 shadow-sm">
                                         @if($gw->code === 'mpesa') <img src="{{ asset('mpesa-logo.webp') }}" alt="M-Pesa" class="h-6 w-auto object-contain">
                                         @elseif($gw->code === 'paypal') <img src="{{ asset('paypal.png') }}" alt="PayPal" class="h-6 w-auto object-contain">
                                         @elseif($gw->code === 'stripe') <img src="{{ asset('stripe-logo.webp') }}" alt="Stripe" class="h-6 w-auto object-contain">
@@ -128,12 +127,38 @@
                                         <span class="block text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold"><i class="fa-solid fa-shield-check mr-1"></i> Instant & Secure</span>
                                     </div>
                                 </div>
-                            </label>
+                            </button>
                         @endforeach
                     </div>
+                </div>
 
+                <!-- 4A. M-PESA COMPACT PAYMENT FORM (NO NEED FOR FULL FORM) -->
+                <div x-show="$wire.gateway_code === 'mpesa'" x-transition class="p-6 rounded-3xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <img src="{{ asset('mpesa-logo.webp') }}" alt="M-Pesa" class="h-8 w-auto">
+                        <div>
+                            <h4 class="font-heading font-bold text-sm text-emerald-950 dark:text-emerald-200">Safaricom M-Pesa Express Checkout</h4>
+                            <p class="text-xs text-emerald-700 dark:text-emerald-400">Enter your M-Pesa number below to receive an instant STK Push prompt on your phone.</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-xs mb-1 text-slate-700 dark:text-slate-300">M-Pesa Phone Number <span class="text-rose-500">*</span></label>
+                        <input type="text" wire:model="donor_phone" placeholder="e.g. 0712345678 or 2547..." class="w-full px-4 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-800 text-sm font-mono font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        @error('donor_phone') <span class="text-rose-500 text-[11px] font-bold mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <button type="submit" wire:loading.attr="disabled" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-sm shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-2">
+                        <span wire:loading.remove><i class="fa-solid fa-mobile-screen mr-1"></i> Pay {{ $currency }} {{ number_format(!empty($custom_amount) ? $custom_amount : $amount) }} via M-Pesa STK Push</span>
+                        <span wire:loading><i class="fa-solid fa-spinner fa-spin mr-1"></i> Sending STK Push to Phone...</span>
+                    </button>
+                </div>
+
+                <!-- 4B. OTHER GATEWAYS DETAILS FORM (APPEARS ONLY WHEN GATEWAY IS CLICKED) -->
+                <div x-show="$wire.gateway_code && $wire.gateway_code !== 'mpesa'" x-transition class="space-y-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+                    
                     <!-- Crypto Coin Selection when NOWPayments is selected -->
-                    <div x-show="$wire.gateway_code === 'nowpayments'" class="mt-4 p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 space-y-3">
+                    <div x-show="$wire.gateway_code === 'nowpayments'" class="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 space-y-2">
                         <label class="block text-xs font-bold text-amber-900 dark:text-amber-300">Select Cryptocurrency Coin:</label>
                         <select wire:model="crypto_coin" class="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white">
                             <option value="usdttrc20">Tether USD (USDT - TRC20 / ERC20)</option>
@@ -145,35 +170,25 @@
                             <option value="ltc">Litecoin (LTC)</option>
                         </select>
                     </div>
-                </div>
 
-                <!-- 4. Donor Personal Details -->
-                <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-                    <h4 class="font-heading font-bold text-sm text-slate-900 dark:text-white">Donor Details</h4>
+                    <h4 class="font-heading font-bold text-sm text-slate-900 dark:text-white">Donor Information (For PDF Receipt)</h4>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                         <div>
-                            <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Full Name</label>
+                            <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Full Name <span class="text-slate-400 font-normal">(Optional)</span></label>
                             <input type="text" wire:model="donor_name" placeholder="John Doe" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            @error('donor_name') <span class="text-rose-500 text-[10px] mt-1">{{ $message }}</span> @enderror
                         </div>
                         <div>
-                            <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Email Address (For PDF Receipt)</label>
+                            <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Email Address <span class="text-rose-500">* (For PDF Receipt)</span></label>
                             <input type="email" wire:model="donor_email" placeholder="john@example.com" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            @error('donor_email') <span class="text-rose-500 text-[10px] mt-1">{{ $message }}</span> @enderror
+                            @error('donor_email') <span class="text-rose-500 text-[11px] font-bold mt-1 block">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                            <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">
-                                @if($gateway_code === 'mpesa')
-                                    Phone Number <span class="text-emerald-600 font-extrabold">* (Required for M-Pesa STK Push)</span>
-                                @else
-                                    Phone Number <span class="text-slate-400 font-normal">(Optional)</span>
-                                @endif
-                            </label>
+                        <div>
+                            <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Phone Number <span class="text-slate-400 font-normal">(Optional)</span></label>
                             <input type="text" wire:model="donor_phone" placeholder="0712345678 or 2547..." class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            @error('donor_phone') <span class="text-rose-500 text-[10px] mt-1">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Country</label>
@@ -190,6 +205,12 @@
                         <input type="checkbox" id="anonymous" wire:model="is_anonymous" class="rounded text-emerald-600 focus:ring-emerald-500">
                         <label for="anonymous" class="text-xs font-semibold text-slate-700 dark:text-slate-300">Make this donation anonymous on public leaderboards</label>
                     </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" wire:loading.attr="disabled" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-sm shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-2">
+                        <span wire:loading.remove><i class="fa-solid fa-shield-heart mr-1"></i> Proceed to Secure Payment of {{ $currency }} {{ number_format(!empty($custom_amount) ? $custom_amount : $amount, 2) }}</span>
+                        <span wire:loading><i class="fa-solid fa-spinner fa-spin mr-1"></i> Initiating Payment Gateway...</span>
+                    </button>
                 </div>
 
                 <!-- 5. Payment Modal / Instructions Output (If initiated) -->
@@ -214,12 +235,6 @@
                         @endif
                     </div>
                 @endif
-
-                <!-- Submit Button -->
-                <button type="submit" wire:loading.attr="disabled" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-sm shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-2">
-                    <span wire:loading.remove><i class="fa-solid fa-heart mr-1"></i> Complete Donation of {{ $currency }} {{ number_format(!empty($custom_amount) ? $custom_amount : $amount, 2) }}</span>
-                    <span wire:loading><i class="fa-solid fa-spinner fa-spin mr-1"></i> Initiating Payment Gateway...</span>
-                </button>
 
             </form>
         </div>
