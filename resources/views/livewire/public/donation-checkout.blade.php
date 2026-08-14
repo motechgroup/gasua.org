@@ -115,12 +115,12 @@
                                 <input type="radio" wire:model.live="gateway_code" value="{{ $gw->code }}" class="sr-only">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-lg text-emerald-600">
-                                        @if($gw->code === 'mpesa') <i class="fa-solid fa-mobile-screen"></i>
+                                        @if($gw->code === 'mpesa') <img src="{{ asset('mpesa-logo.webp') }}" alt="M-Pesa" class="h-6 w-auto object-contain">
+                                        @elseif($gw->code === 'paypal') <img src="{{ asset('paypal.png') }}" alt="PayPal" class="h-6 w-auto object-contain">
+                                        @elseif($gw->code === 'stripe') <img src="{{ asset('stripe-logo.webp') }}" alt="Stripe" class="h-6 w-auto object-contain">
                                         @elseif($gw->code === 'flutterwave') <i class="fa-solid fa-credit-card"></i>
-                                        @elseif($gw->code === 'stripe') <i class="fa-brands fa-stripe"></i>
                                         @elseif($gw->code === 'dpo') <i class="fa-solid fa-globe"></i>
-                                        @elseif($gw->code === 'paypal') <i class="fa-brands fa-paypal"></i>
-                                        @elseif($gw->code === 'nowpayments') <i class="fa-brands fa-bitcoin"></i>
+                                        @elseif($gw->code === 'nowpayments') <i class="fa-brands fa-bitcoin text-amber-500"></i>
                                         @endif
                                     </div>
                                     <div>

@@ -218,11 +218,10 @@
                 <p>&copy; {{ date('Y') }} Gusii All Stars Foundation. All rights reserved. Built with excellence.</p>
                 <div class="flex items-center gap-4 text-slate-400 text-lg">
                     <span class="text-xs font-semibold text-slate-500">Accepted Payments:</span>
-                    <i class="fa-solid fa-mobile-screen text-emerald-400" title="M-Pesa STK Push"></i>
-                    <i class="fa-brands fa-cc-visa text-blue-400" title="Visa Cards"></i>
-                    <i class="fa-brands fa-cc-mastercard text-amber-500" title="Mastercard"></i>
-                    <i class="fa-brands fa-paypal text-sky-400" title="PayPal"></i>
-                    <i class="fa-brands fa-bitcoin text-orange-400" title="Crypto NOWPayments"></i>
+                    <img src="{{ asset('mpesa-logo.webp') }}" alt="M-Pesa" class="h-5 w-auto object-contain">
+                    <img src="{{ asset('stripe-logo.webp') }}" alt="Stripe" class="h-5 w-auto object-contain">
+                    <img src="{{ asset('paypal.png') }}" alt="PayPal" class="h-5 w-auto object-contain font-bold">
+                    <i class="fa-brands fa-bitcoin text-amber-500" title="Crypto NOWPayments"></i>
                 </div>
             </div>
         </div>

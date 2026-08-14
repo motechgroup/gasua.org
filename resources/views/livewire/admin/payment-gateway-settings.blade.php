@@ -21,11 +21,12 @@
                     <div class="flex justify-between items-center mb-2">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 font-bold flex items-center justify-center text-lg">
-                                @if($gw->code === 'mpesa') <i class="fa-solid fa-mobile-screen"></i>
+                                @if($gw->code === 'mpesa') <img src="{{ asset('mpesa-logo.webp') }}" alt="M-Pesa" class="h-6 w-auto object-contain">
+                                @elseif($gw->code === 'paypal') <img src="{{ asset('paypal.png') }}" alt="PayPal" class="h-6 w-auto object-contain">
+                                @elseif($gw->code === 'stripe') <img src="{{ asset('stripe-logo.webp') }}" alt="Stripe" class="h-6 w-auto object-contain">
                                 @elseif($gw->code === 'flutterwave') <i class="fa-solid fa-credit-card"></i>
                                 @elseif($gw->code === 'dpo') <i class="fa-solid fa-globe"></i>
-                                @elseif($gw->code === 'paypal') <i class="fa-brands fa-paypal"></i>
-                                @elseif($gw->code === 'nowpayments') <i class="fa-brands fa-bitcoin"></i>
+                                @elseif($gw->code === 'nowpayments') <i class="fa-brands fa-bitcoin text-amber-500"></i>
                                 @endif
                             </div>
                             <div>
