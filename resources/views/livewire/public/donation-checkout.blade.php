@@ -125,11 +125,25 @@
                                     </div>
                                     <div>
                                         <span class="block text-xs font-extrabold text-slate-900 dark:text-white">{{ $gw->name }}</span>
-                                        <span class="block text-[10px] text-slate-500">{{ $gw->fee_percentage > 0 ? $gw->fee_percentage.'% fee' : 'Zero Fee' }}</span>
+                                        <span class="block text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold"><i class="fa-solid fa-shield-check mr-1"></i> Instant & Secure</span>
                                     </div>
                                 </div>
                             </label>
                         @endforeach
+                    </div>
+
+                    <!-- Crypto Coin Selection when NOWPayments is selected -->
+                    <div x-show="$wire.gateway_code === 'nowpayments'" class="mt-4 p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 space-y-3">
+                        <label class="block text-xs font-bold text-amber-900 dark:text-amber-300">Select Cryptocurrency Coin:</label>
+                        <select wire:model="crypto_coin" class="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white">
+                            <option value="usdttrc20">Tether USD (USDT - TRC20 / ERC20)</option>
+                            <option value="btc">Bitcoin (BTC)</option>
+                            <option value="eth">Ethereum (ETH)</option>
+                            <option value="usdc">USD Coin (USDC)</option>
+                            <option value="sol">Solana (SOL)</option>
+                            <option value="bnb">Binance Coin (BNB)</option>
+                            <option value="ltc">Litecoin (LTC)</option>
+                        </select>
                     </div>
                 </div>
 
