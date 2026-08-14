@@ -62,7 +62,7 @@ class StripeGatewayService implements PaymentGatewayInterface
                         'quantity' => 1,
                     ],
                 ],
-                'success_url' => route('public.donate.checkout') . '?reference=' . $donation->transaction_reference . '&status=success',
+                'success_url' => route('public.donate.checkout') . '?reference=' . $donation->transaction_reference . '&status=success&session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('public.donate.checkout') . '?reference=' . $donation->transaction_reference . '&status=cancelled',
             ]);
 
