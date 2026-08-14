@@ -165,8 +165,13 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                        <div>
-                            <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Phone Number (Required for M-Pesa STK Push)</label>
+                            <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">
+                                @if($gateway_code === 'mpesa')
+                                    Phone Number <span class="text-emerald-600 font-extrabold">* (Required for M-Pesa STK Push)</span>
+                                @else
+                                    Phone Number <span class="text-slate-400 font-normal">(Optional)</span>
+                                @endif
+                            </label>
                             <input type="text" wire:model="donor_phone" placeholder="0712345678 or 2547..." class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             @error('donor_phone') <span class="text-rose-500 text-[10px] mt-1">{{ $message }}</span> @enderror
                         </div>
