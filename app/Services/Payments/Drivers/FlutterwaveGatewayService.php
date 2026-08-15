@@ -50,7 +50,7 @@ class FlutterwaveGatewayService implements PaymentGatewayInterface
             'tx_ref' => $ref,
             'amount' => $donation->amount,
             'currency' => $donation->currency,
-            'redirect_url' => route('public.donate.checkout', ['reference' => $donation->transaction_reference]),
+            'redirect_url' => \App\Services\Payments\CallbackUrlDetector::getReturnUrl('public.donate.checkout', ['reference' => $donation->transaction_reference]),
             'payment_options' => 'card,mobilemoneykenya,ussd,banktransfer,mpesa',
             'customer' => [
                 'email' => $donation->donor_email ?? 'donor@gusiiallstars.org',

@@ -11,52 +11,73 @@ use Illuminate\Support\Facades\DB;
 
 class ReportService
 {
-    public function getExecutiveSummary(): array
+    protected function applyDonationFilters($query, array $filters)
     {
-        $totalRaised = Donation::where('payment_status', 'completed')->sum('amount');
-        $totalDonationsCount = Donation::where('payment_status', 'completed')->count();
-        $totalCampaignsCount = Campaign::count();
-        $activeVolunteersCount = Volunteer::where('status', 'approved')->count();
-        $totalExpenses = TransparencyExpense::sum('amount');
+        if (!empty($filters['start_date'])) {
+            $query->whereDate('created_at', '>=', $filters['start_date']);
+        }
+        if (!empty($filters['end_date'])) {
+            $query->whereDate('created_at', '<=', $filters['end_date']);
+        }
+        if (!empty($filters['gateway_code'])) {
+            $query->where('gateway_code', $filters['gateway_code']);
+        }
+        if (!empty($filters['payment_status'])) {
+            $query->where('payment_status', $filters['payment_status']);
+        }
+        return $query;
+    }
+
+    public function getExecutiveSummary(array $filters = []): array
+    {
+        $donationQuery = Donation::query();
+        if (empty($filters['payment_status'])) {
+            $donationQuery->where('payment_status', 'completed');
+        }
+        $donationQuery = $this->applyDonationFilters($donationQuery, $filters);
+
+        $totalRaised = (float) (clone $donationQuery)->sum('amount');
+        $totalDonationsCount = (clone $donationQuery)->count();
+
+        $expenseQuery = TransparencyExpense::query();
+        if (!empty($filters['start_date'])) {
+            $expenseQuery->whereDate('expense_date', '>=', $filters['start_date']);
+        }
+        if (!empty($filters['end_date'])) {
+            $expenseQuery->whereDate('expense_date', '<=', $filters['end_date']);
+        }
+        $totalExpenses = (float) $expenseQuery->sum('amount');
         $netFundBalance = max(0, $totalRaised - $totalExpenses);
 
         return [
             'total_raised' => $totalRaised,
             'total_donations_count' => $totalDonationsCount,
-            'total_campaigns' => $totalCampaignsCount,
-            'active_volunteers' => $activeVolunteersCount,
+            'total_campaigns' => Campaign::count(),
+            'active_volunteers' => Volunteer::where('status', 'approved')->count(),
             'total_expenses' => $totalExpenses,
             'net_fund_balance' => $netFundBalance,
         ];
     }
 
-    public function getGatewayBreakdown(): array
+    public function getGatewayBreakdown(array $filters = []): array
     {
-        return Donation::where('payment_status', 'completed')
+        $query = Donation::query();
+        if (empty($filters['payment_status'])) {
+            $query->where('payment_status', 'completed');
+        }
+        $query = $this->applyDonationFilters($query, $filters);
+
+        return $query
             ->select('gateway_code', DB::raw('COUNT(*) as total_count'), DB::raw('SUM(amount) as total_amount'))
             ->groupBy('gateway_code')
             ->get()
             ->toArray();
     }
 
-    public function getMonthlyTrends(): array
+    public function getFilteredDonations(array $filters = [])
     {
-        $driver = DB::getDriverName();
-        $dateExpr = $driver === 'sqlite'
-            ? "strftime('%Y-%m', created_at)"
-            : "DATE_FORMAT(created_at, '%Y-%m')";
-
-        $donations = Donation::where('payment_status', 'completed')
-            ->select(
-                DB::raw("{$dateExpr} as month_year"),
-                DB::raw('SUM(amount) as total_amount'),
-                DB::raw('COUNT(*) as total_count')
-            )
-            ->groupBy('month_year')
-            ->orderBy('month_year', 'asc')
-            ->limit(12)
-            ->get();
-
-        return $donations->toArray();
+        $query = Donation::with('campaign');
+        $query = $this->applyDonationFilters($query, $filters);
+        return $query->latest();
     }
 }

@@ -96,7 +96,7 @@ class MpesaGatewayService implements PaymentGatewayInterface
         $passkey = $creds['passkey'] ?? '';
         $password = base64_encode($shortcode . $passkey . $timestamp);
 
-        $callbackUrl = route('webhooks.mpesa');
+        $callbackUrl = \App\Services\Payments\CallbackUrlDetector::getWebhookUrl('webhooks.mpesa', '/webhooks/mpesa');
         $amount = (int) round($donation->amount);
 
         $payload = [
