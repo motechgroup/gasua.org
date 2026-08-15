@@ -8,10 +8,7 @@
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6 animate-pulse">
-                <i class="fa-solid fa-heart-pulse"></i> GASUA - Gusii All Stars Foundation Kenya
-            </div>
-            
+
             <h1 class="font-heading font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-none mb-6">
                 Nurturing Talents. <br class="hidden sm:inline">
                 <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Transforming Lives in Gusii.</span>
@@ -35,22 +32,115 @@
     <!-- Impact Statistics Counter Bar -->
     <section class="relative z-20 -mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 sm:p-8 rounded-3xl glass-panel shadow-2xl border border-slate-200/80 dark:border-slate-800">
+            
+            <!-- Meals Served Counter -->
             <div class="text-center p-4">
-                <div class="text-3xl sm:text-4xl font-extrabold font-heading text-emerald-600 dark:text-emerald-400">{{ number_format($stats['meals']) }}+</div>
+                <div x-data="{
+                    current: 0,
+                    target: {{ (int) $stats['meals'] }},
+                    init() {
+                        let duration = 2000;
+                        let startTimestamp = null;
+                        const step = (timestamp) => {
+                            if (!startTimestamp) startTimestamp = timestamp;
+                            let progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                            let easeOut = 1 - Math.pow(1 - progress, 3);
+                            this.current = Math.floor(easeOut * this.target);
+                            if (progress < 1) {
+                                window.requestAnimationFrame(step);
+                            } else {
+                                this.current = this.target;
+                            }
+                        };
+                        window.requestAnimationFrame(step);
+                    }
+                }" class="text-3xl sm:text-4xl font-extrabold font-heading text-emerald-600 dark:text-emerald-400">
+                    <span x-text="current.toLocaleString() + '+'">{{ number_format($stats['meals']) }}+</span>
+                </div>
                 <div class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Meals Served</div>
             </div>
+
+            <!-- Children Sponsored Counter -->
             <div class="text-center p-4 border-l border-slate-200 dark:border-slate-800">
-                <div class="text-3xl sm:text-4xl font-extrabold font-heading text-teal-600 dark:text-teal-400">{{ number_format($stats['children']) }}+</div>
+                <div x-data="{
+                    current: 0,
+                    target: {{ (int) $stats['children'] }},
+                    init() {
+                        let duration = 2000;
+                        let startTimestamp = null;
+                        const step = (timestamp) => {
+                            if (!startTimestamp) startTimestamp = timestamp;
+                            let progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                            let easeOut = 1 - Math.pow(1 - progress, 3);
+                            this.current = Math.floor(easeOut * this.target);
+                            if (progress < 1) {
+                                window.requestAnimationFrame(step);
+                            } else {
+                                this.current = this.target;
+                            }
+                        };
+                        window.requestAnimationFrame(step);
+                    }
+                }" class="text-3xl sm:text-4xl font-extrabold font-heading text-teal-600 dark:text-teal-400">
+                    <span x-text="current.toLocaleString() + '+'">{{ number_format($stats['children']) }}+</span>
+                </div>
                 <div class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Children Sponsored</div>
             </div>
+
+            <!-- Trees Planted Counter -->
             <div class="text-center p-4 border-l border-slate-200 dark:border-slate-800">
-                <div class="text-3xl sm:text-4xl font-extrabold font-heading text-cyan-600 dark:text-cyan-400">{{ number_format($stats['trees']) }}+</div>
+                <div x-data="{
+                    current: 0,
+                    target: {{ (int) $stats['trees'] }},
+                    init() {
+                        let duration = 2000;
+                        let startTimestamp = null;
+                        const step = (timestamp) => {
+                            if (!startTimestamp) startTimestamp = timestamp;
+                            let progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                            let easeOut = 1 - Math.pow(1 - progress, 3);
+                            this.current = Math.floor(easeOut * this.target);
+                            if (progress < 1) {
+                                window.requestAnimationFrame(step);
+                            } else {
+                                this.current = this.target;
+                            }
+                        };
+                        window.requestAnimationFrame(step);
+                    }
+                }" class="text-3xl sm:text-4xl font-extrabold font-heading text-cyan-600 dark:text-cyan-400">
+                    <span x-text="current.toLocaleString() + '+'">{{ number_format($stats['trees']) }}+</span>
+                </div>
                 <div class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Trees Planted</div>
             </div>
+
+            <!-- Talents Nurtured Counter -->
             <div class="text-center p-4 border-l border-slate-200 dark:border-slate-800">
-                <div class="text-3xl sm:text-4xl font-extrabold font-heading text-emerald-600 dark:text-emerald-400">{{ number_format($stats['talents']) }}+</div>
+                <div x-data="{
+                    current: 0,
+                    target: {{ (int) $stats['talents'] }},
+                    init() {
+                        let duration = 2000;
+                        let startTimestamp = null;
+                        const step = (timestamp) => {
+                            if (!startTimestamp) startTimestamp = timestamp;
+                            let progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                            let easeOut = 1 - Math.pow(1 - progress, 3);
+                            this.current = Math.floor(easeOut * this.target);
+                            if (progress < 1) {
+                                window.requestAnimationFrame(step);
+                            } else {
+                                this.current = this.target;
+                            }
+                        };
+                        window.requestAnimationFrame(step);
+                    }
+                }" class="text-3xl sm:text-4xl font-extrabold font-heading text-emerald-600 dark:text-emerald-400">
+                    <span x-text="current.toLocaleString() + '+'">{{ number_format($stats['talents']) }}+</span>
+                </div>
                 <div class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Talents Nurtured</div>
             </div>
+
         </div>
     </section>
 

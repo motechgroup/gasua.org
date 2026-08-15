@@ -1,11 +1,26 @@
 <div class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold uppercase tracking-widest">
-            100% Radical Transparency
-        </span>
-        <h1 class="font-heading font-extrabold text-4xl text-slate-900 dark:text-white mt-2">Public Financial Transparency</h1>
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2">We believe in complete accountability. Track every shilling received and spent by Gusii All Stars Foundation.</p>
-    </div>
+    @if(!$isEnabled)
+        <div class="max-w-2xl mx-auto my-12 bg-white dark:bg-slate-900 rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-800 shadow-2xl space-y-6">
+            <div class="w-20 h-20 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-3xl">
+                <i class="fa-solid fa-eye-slash"></i>
+            </div>
+            <h1 class="font-heading font-extrabold text-3xl text-slate-900 dark:text-white">Transparency Portal Offline</h1>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                The Public Transparency and Financial Audit module is currently offline for scheduled review or administration settings. Please check back later.
+            </p>
+            <div class="pt-4 flex justify-center gap-4">
+                <a href="{{ route('home') }}" class="px-6 py-3 rounded-2xl bg-emerald-600 text-white font-bold text-xs shadow-lg">Return to Home</a>
+                <a href="{{ route('public.contact') }}" class="px-6 py-3 rounded-2xl bg-slate-800 text-white font-bold text-xs">Contact Foundation</a>
+            </div>
+        </div>
+    @else
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold uppercase tracking-widest">
+                100% Radical Transparency
+            </span>
+            <h1 class="font-heading font-extrabold text-4xl text-slate-900 dark:text-white mt-2">Public Financial Transparency</h1>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2">We believe in complete accountability. Track every shilling received and spent by Gusii All Stars Foundation.</p>
+        </div>
 
     <!-- Financial Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -67,4 +82,5 @@
             </table>
         </div>
     </div>
+    @endif
 </div>

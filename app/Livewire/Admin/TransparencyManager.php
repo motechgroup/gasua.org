@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\TransparencyExpense;
 use App\Models\Campaign;
+use App\Models\SiteSetting;
 
 class TransparencyManager extends Component
 {
@@ -14,6 +15,20 @@ class TransparencyManager extends Component
     public $expense_date = '';
     public $description = '';
     public $category = 'Relief Supplies';
+
+    public $enable_public_transparency = true;
+
+    public function mount()
+    {
+        $this->enable_public_transparency = (bool) SiteSetting::getByKey('enable_public_transparency', true);
+    }
+
+    public function toggleTransparencyStatus()
+    {
+        $this->enable_public_transparency = !$this->enable_public_transparency;
+        SiteSetting::setKey('enable_public_transparency', $this->enable_public_transparency);
+        session()->flash('message', 'Public Transparency module visibility updated to ' . ($this->enable_public_transparency ? 'ENABLED' : 'DISABLED') . '.');
+    }
 
     public function createExpense()
     {

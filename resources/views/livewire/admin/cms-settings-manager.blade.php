@@ -79,18 +79,22 @@
     <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-lg space-y-6">
         <form wire:submit.prevent="saveSettings" class="space-y-6 text-xs">
             <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white">General Foundation Info</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                     <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Foundation Name</label>
                     <input type="text" wire:model="site_name" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                 </div>
                 <div>
-                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Contact Email</label>
-                    <input type="email" wire:model="contact_email" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Header Contact Phone</label>
+                    <input type="text" wire:model="contact_phone" placeholder="+254 700 123 456" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                 </div>
                 <div>
-                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Contact Phone</label>
-                    <input type="text" wire:model="contact_phone" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Header Contact Email</label>
+                    <input type="email" wire:model="contact_email" placeholder="info@gusiiallstars.org" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Header Contact Location</label>
+                    <input type="text" wire:model="contact_location" placeholder="Kisii Town, Kenya" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                 </div>
             </div>
 
@@ -98,6 +102,15 @@
                 <div>
                     <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Deployment Webhook Secret Token</label>
                     <input type="text" wire:model="deploy_secret" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono">
+                </div>
+                <div class="flex items-center pt-6">
+                    <label class="flex items-center gap-3 cursor-pointer p-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full">
+                        <input type="checkbox" wire:model="enable_public_transparency" class="w-5 h-5 text-emerald-600 rounded focus:ring-emerald-500">
+                        <div>
+                            <span class="block font-bold text-slate-900 dark:text-white text-xs">Enable Public Transparency Module</span>
+                            <span class="block text-[11px] text-slate-500">Controls visibility of financial reports on /transparency</span>
+                        </div>
+                    </label>
                 </div>
             </div>
 

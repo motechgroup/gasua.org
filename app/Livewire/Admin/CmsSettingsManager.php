@@ -14,6 +14,8 @@ class CmsSettingsManager extends Component
     public $site_name = '';
     public $contact_email = '';
     public $contact_phone = '';
+    public $contact_location = '';
+    public $enable_public_transparency = true;
     public $impact_meals = 25400;
     public $impact_children = 380;
     public $impact_trees = 12500;
@@ -36,7 +38,9 @@ class CmsSettingsManager extends Component
     {
         $this->site_name = SiteSetting::getByKey('site_name', 'Gusii All Stars Foundation');
         $this->contact_email = SiteSetting::getByKey('contact_email', 'info@gusiiallstars.org');
-        $this->contact_phone = SiteSetting::getByKey('contact_phone', '+254700123456');
+        $this->contact_phone = SiteSetting::getByKey('contact_phone', '+254 700 123 456');
+        $this->contact_location = SiteSetting::getByKey('contact_location', 'Kisii Town, Kenya');
+        $this->enable_public_transparency = (bool) SiteSetting::getByKey('enable_public_transparency', true);
         $this->impact_meals = SiteSetting::getByKey('impact_meals_served', 25400);
         $this->impact_children = SiteSetting::getByKey('impact_children_sponsored', 380);
         $this->impact_trees = SiteSetting::getByKey('impact_trees_planted', 12500);
@@ -88,6 +92,8 @@ class CmsSettingsManager extends Component
         SiteSetting::setKey('site_name', $this->site_name);
         SiteSetting::setKey('contact_email', $this->contact_email);
         SiteSetting::setKey('contact_phone', $this->contact_phone);
+        SiteSetting::setKey('contact_location', $this->contact_location);
+        SiteSetting::setKey('enable_public_transparency', $this->enable_public_transparency);
         SiteSetting::setKey('impact_meals_served', $this->impact_meals);
         SiteSetting::setKey('impact_children_sponsored', $this->impact_children);
         SiteSetting::setKey('impact_trees_planted', $this->impact_trees);

@@ -87,13 +87,15 @@
     <div class="bg-emerald-900 text-emerald-100 text-xs py-2 px-4">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-6">
-                <span><i class="fa-solid fa-phone mr-1.5 text-emerald-400"></i> +254 700 123 456</span>
-                <span><i class="fa-solid fa-envelope mr-1.5 text-emerald-400"></i> info@gusiiallstars.org</span>
-                <span class="hidden sm:inline"><i class="fa-solid fa-location-dot mr-1.5 text-emerald-400"></i> Kisii Town, Kenya</span>
+                <span><i class="fa-solid fa-phone mr-1.5 text-emerald-400"></i> {{ \App\Models\SiteSetting::getByKey('contact_phone', '+254 700 123 456') }}</span>
+                <span><i class="fa-solid fa-envelope mr-1.5 text-emerald-400"></i> {{ \App\Models\SiteSetting::getByKey('contact_email', 'info@gusiiallstars.org') }}</span>
+                <span class="hidden sm:inline"><i class="fa-solid fa-location-dot mr-1.5 text-emerald-400"></i> {{ \App\Models\SiteSetting::getByKey('contact_location', 'Kisii Town, Kenya') }}</span>
             </div>
             <div class="flex items-center gap-4">
-                <a href="{{ route('public.transparency') }}" class="hover:text-emerald-300 transition-colors"><i class="fa-solid fa-chart-pie mr-1"></i> Public Transparency</a>
-                <span class="text-emerald-700">|</span>
+                @if(\App\Models\SiteSetting::getByKey('enable_public_transparency', true))
+                    <a href="{{ route('public.transparency') }}" class="hover:text-emerald-300 transition-colors"><i class="fa-solid fa-chart-pie mr-1"></i> Public Transparency</a>
+                    <span class="text-emerald-700">|</span>
+                @endif
                 <button @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light')" class="hover:text-emerald-300 transition-colors flex items-center gap-1">
                     <i class="fa-solid" :class="darkMode ? 'fa-sun text-amber-400' : 'fa-moon text-slate-300'"></i>
                     <span x-text="darkMode ? 'Light Mode' : 'Dark Mode'"></span>
@@ -226,7 +228,9 @@
                         <li><a href="{{ route('public.campaigns') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> Active Campaigns</a></li>
                         <li><a href="{{ route('public.talents') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> Talent Directory</a></li>
                         <li><a href="{{ route('public.events') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> Upcoming Events</a></li>
-                        <li><a href="{{ route('public.transparency') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> Financial Transparency</a></li>
+                        @if(\App\Models\SiteSetting::getByKey('enable_public_transparency', true))
+                            <li><a href="{{ route('public.transparency') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> Financial Transparency</a></li>
+                        @endif
                         <li><a href="{{ route('public.volunteer') }}" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-chevron-right text-[9px] mr-2 text-emerald-500"></i> Become a Volunteer</a></li>
                     </ul>
                 </div>

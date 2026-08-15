@@ -4,6 +4,31 @@
         <p class="text-xs text-slate-500">Record program disbursements and proof documents for public audit display.</p>
     </div>
 
+    @if(session()->has('message'))
+        <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex justify-between items-center">
+            <span><i class="fa-solid fa-circle-check mr-2"></i> {{ session('message') }}</span>
+        </div>
+    @endif
+
+    <!-- Module Status Toggle Card -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider {{ $enable_public_transparency ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800' : 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-800' }}">
+                    <i class="fa-solid {{ $enable_public_transparency ? 'fa-eye' : 'fa-eye-slash' }} mr-1"></i>
+                    Status: {{ $enable_public_transparency ? 'Publicly Visible (ON)' : 'Hidden / Disabled (OFF)' }}
+                </span>
+            </div>
+            <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white mt-2">Public Transparency Module Visibility</h3>
+            <p class="text-xs text-slate-500">Controls whether visitors can view financial audits and expenses on the public website (<code class="text-emerald-600 font-mono">/transparency</code>).</p>
+        </div>
+
+        <button wire:click="toggleTransparencyStatus" class="px-6 py-3 rounded-2xl font-bold text-xs shadow-lg transition-all flex items-center gap-2 {{ $enable_public_transparency ? 'bg-rose-600 hover:bg-rose-500 text-white' : 'bg-emerald-600 hover:bg-emerald-500 text-white' }}">
+            <i class="fa-solid {{ $enable_public_transparency ? 'fa-power-off' : 'fa-check-circle' }}"></i>
+            {{ $enable_public_transparency ? 'Disable Public Transparency' : 'Enable Public Transparency' }}
+        </button>
+    </div>
+
     <!-- Record Expense Form -->
     <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg">
         <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white mb-4">Record New Expense</h3>
