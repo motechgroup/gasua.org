@@ -15,7 +15,7 @@ class DeployWebhookController extends Controller
         $expectedSecret = SiteSetting::getByKey('deploy_secret', 'gasua_deploy_token_99');
         $providedSecret = $request->query('secret') ?? $request->header('X-Deploy-Secret');
 
-        if (empty($providedSecret) || $providedSecret !== $expectedSecret) {
+        if (empty($providedSecret) || !hash_equals((string)$expectedSecret, (string)$providedSecret)) {
             return response()->json(['success' => false, 'message' => 'Unauthorized deployment token.'], 403);
         }
 

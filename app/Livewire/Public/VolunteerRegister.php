@@ -20,11 +20,23 @@ class VolunteerRegister extends Component
 
     public function registerVolunteer()
     {
+        // Sanitize string inputs
+        $this->name = trim(strip_tags($this->name));
+        $this->email = trim(strtolower($this->email));
+        $this->phone = trim(strip_tags($this->phone));
+        $this->county = trim(strip_tags($this->county));
+        $this->address = trim(strip_tags($this->address));
+        $this->availability = trim(strip_tags($this->availability));
+        $this->motivation = trim(strip_tags($this->motivation));
+
         $this->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|email',
-            'phone' => 'required|string|max:20',
-            'motivation' => 'required|string|max:1000',
+            'name' => 'required|string|min:2|max:100',
+            'email' => 'required|email|max:150',
+            'phone' => 'required|string|max:25',
+            'county' => 'required|string|max:100',
+            'address' => 'nullable|string|max:255',
+            'motivation' => 'required|string|min:10|max:1000',
+            'skills' => 'nullable|array',
         ]);
 
         Volunteer::create([

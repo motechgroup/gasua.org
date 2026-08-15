@@ -50,17 +50,22 @@ Route::get('/talents', TalentDirectory::class)->name('public.talents');
 Route::get('/events', EventsIndex::class)->name('public.events');
 Route::get('/campaigns', CampaignsIndex::class)->name('public.campaigns');
 Route::get('/campaigns/{slug}', CampaignDetail::class)->name('public.campaigns.show');
-Route::get('/donate', DonationCheckout::class)->name('public.donate');
-Route::get('/donate/checkout', DonationCheckout::class)->name('public.donate.checkout');
 
-Route::get('/fundraise/create', P2pCreate::class)->name('public.p2p.create');
+Route::middleware(['throttle:15,1'])->group(function () {
+    Route::get('/donate', DonationCheckout::class)->name('public.donate');
+    Route::get('/donate/checkout', DonationCheckout::class)->name('public.donate.checkout');
+});
+
+Route::middleware(['throttle:10,1'])->group(function () {
+    Route::get('/fundraise/create', P2pCreate::class)->name('public.p2p.create');
+    Route::get('/volunteer', VolunteerRegister::class)->name('public.volunteer');
+    Route::get('/contact', ContactUs::class)->name('public.contact');
+});
+
 Route::get('/fundraise/{slug}', P2pDetail::class)->name('public.p2p.show');
-
-Route::get('/volunteer', VolunteerRegister::class)->name('public.volunteer');
 Route::get('/news', NewsIndex::class)->name('public.news');
 Route::get('/gallery', GalleryIndex::class)->name('public.gallery');
 Route::get('/transparency', TransparencyDashboard::class)->name('public.transparency');
-Route::get('/contact', ContactUs::class)->name('public.contact');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/donor/dashboard', DonorDashboard::class)->name('public.donor.dashboard');
@@ -71,20 +76,24 @@ Route::middleware(['auth'])->group(function () {
 | PDF Receipt & QR Verification Endpoints
 |--------------------------------------------------------------------------
 */
-Route::get('/receipts/download/{reference}', [ReceiptController::class, 'downloadPdf'])->name('receipts.download');
-Route::get('/receipts/verify/{hash}', [ReceiptController::class, 'verifyQr'])->name('receipts.verify');
+Route::middleware(['throttle:30,1'])->group(function () {
+    Route::get('/receipts/download/{reference}', [ReceiptController::class, 'downloadPdf'])->name('receipts.download');
+    Route::get('/receipts/verify/{hash}', [ReceiptController::class, 'verifyQr'])->name('receipts.verify');
+});
 
 /*
 |--------------------------------------------------------------------------
-| Payment Gateway Webhook Endpoints (CSRF Excluded)
+| Payment Gateway Webhook Endpoints (CSRF Excluded, Throttled)
 |--------------------------------------------------------------------------
 */
-Route::post('/webhooks/mpesa', MpesaWebhookController::class)->name('webhooks.mpesa')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
-Route::post('/webhooks/flutterwave', FlutterwaveWebhookController::class)->name('webhooks.flutterwave')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
-Route::post('/webhooks/dpo', DpoWebhookController::class)->name('webhooks.dpo')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
-Route::post('/webhooks/paypal', PaypalWebhookController::class)->name('webhooks.paypal')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
-Route::post('/webhooks/nowpayments', NowpaymentsWebhookController::class)->name('webhooks.nowpayments')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
-Route::post('/webhooks/stripe', StripeWebhookController::class)->name('webhooks.stripe')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+Route::middleware(['throttle:60,1'])->group(function () {
+    Route::post('/webhooks/mpesa', MpesaWebhookController::class)->name('webhooks.mpesa')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+    Route::post('/webhooks/flutterwave', FlutterwaveWebhookController::class)->name('webhooks.flutterwave')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+    Route::post('/webhooks/dpo', DpoWebhookController::class)->name('webhooks.dpo')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+    Route::post('/webhooks/paypal', PaypalWebhookController::class)->name('webhooks.paypal')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+    Route::post('/webhooks/nowpayments', NowpaymentsWebhookController::class)->name('webhooks.nowpayments')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+    Route::post('/webhooks/stripe', StripeWebhookController::class)->name('webhooks.stripe')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -93,7 +102,10 @@ Route::post('/webhooks/stripe', StripeWebhookController::class)->name('webhooks.
 */
 Route::get('/sitemap.xml', [SeoController::class, 'sitemapXml'])->name('seo.sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robotsTxt'])->name('seo.robots');
-Route::match(['get', 'post'], '/api/deploy/webhook', \App\Http\Controllers\DeployWebhookController::class)->name('deploy.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+Route::match(['get', 'post'], '/api/deploy/webhook', \App\Http\Controllers\DeployWebhookController::class)
+    ->name('deploy.webhook')
+    ->middleware(['throttle:30,1'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
 
 /*
 |--------------------------------------------------------------------------
@@ -125,7 +137,7 @@ Route::get('/login', function () {
         return redirect()->route('admin.dashboard');
     }
     return 'Admin user not found. Run migrate:fresh --seed.';
-})->name('login');
+})->name('login')->middleware('throttle:10,1');
 
 Route::post('/logout', function () {
     auth()->logout();

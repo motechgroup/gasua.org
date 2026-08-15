@@ -16,10 +16,19 @@ class ContactUs extends Component
 
     public function sendMessage()
     {
+        // Sanitize user inputs to prevent XSS & header injections
+        $this->name = trim(strip_tags($this->name));
+        $this->email = trim(strtolower($this->email));
+        $this->phone = trim(strip_tags($this->phone));
+        $this->subject = trim(strip_tags($this->subject));
+        $this->message = trim(strip_tags($this->message));
+
         $this->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|email',
-            'message' => 'required|string|max:2000',
+            'name' => 'required|string|min:2|max:100',
+            'email' => 'required|email|max:150',
+            'phone' => 'nullable|string|max:25',
+            'subject' => 'nullable|string|max:150',
+            'message' => 'required|string|min:5|max:2000',
         ]);
 
         ContactMessage::create([

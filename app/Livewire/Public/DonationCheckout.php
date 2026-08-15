@@ -84,6 +84,15 @@ class DonationCheckout extends Component
 
     public function processDonation()
     {
+        // Sanitize string inputs
+        $this->donor_name = trim(strip_tags($this->donor_name));
+        $this->donor_email = trim(strtolower($this->donor_email));
+        $this->donor_phone = trim(strip_tags($this->donor_phone));
+        $this->donor_country = trim(strip_tags($this->donor_country));
+        $this->donor_message = trim(strip_tags($this->donor_message));
+        $this->dedication_name = trim(strip_tags($this->dedication_name));
+        $this->gateway_code = trim(strip_tags($this->gateway_code));
+
         $finalAmount = !empty($this->custom_amount) ? (float)$this->custom_amount : (float)$this->amount;
 
         if (empty($this->gateway_code)) {
@@ -91,15 +100,15 @@ class DonationCheckout extends Component
             return;
         }
 
-        if ($finalAmount <= 0) {
-            $this->errorMessage = 'Please select or enter a valid donation amount.';
+        if ($finalAmount < 10 || $finalAmount > 10000000) {
+            $this->errorMessage = 'Donation amount must be between KES 10 and KES 10,000,000.';
             return;
         }
 
         // Custom validation per gateway
         if ($this->gateway_code === 'mpesa') {
             $this->validate([
-                'donor_phone' => 'required|string|min:9',
+                'donor_phone' => 'required|string|min:9|max:20',
             ], [
                 'donor_phone.required' => 'Please enter your M-Pesa mobile number to receive the STK Push prompt.',
             ]);
@@ -108,7 +117,7 @@ class DonationCheckout extends Component
             $donorEmail = !empty($this->donor_email) ? $this->donor_email : 'donor@gusiiallstars.org';
         } else {
             $this->validate([
-                'donor_email' => 'required|email',
+                'donor_email' => 'required|email|max:150',
             ], [
                 'donor_email.required' => 'Please enter your email address to receive your official PDF receipt.',
             ]);
