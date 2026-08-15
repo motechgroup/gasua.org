@@ -144,6 +144,7 @@
                                 @can('manage-campaigns')
                                     <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-gauge mr-2"></i> Admin Panel</a>
                                 @endcan
+                                <a href="{{ route('admin.profile') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800"><i class="fa-solid fa-id-badge mr-2 text-emerald-500"></i> My Profile</a>
                                 <a href="{{ route('public.donor.dashboard') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800"><i class="fa-solid fa-history mr-2"></i> Donor History</a>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf

@@ -78,6 +78,9 @@
             <a href="{{ route('admin.cms') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-emerald-400 transition-colors {{ request()->routeIs('admin.cms') ? 'bg-emerald-600 text-white hover:bg-emerald-600 hover:text-white font-bold' : '' }}">
                 <i class="fa-solid fa-sliders text-base"></i> CMS & Settings
             </a>
+            <a href="{{ route('admin.profile') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-emerald-400 transition-colors {{ request()->routeIs('admin.profile') ? 'bg-emerald-600 text-white hover:bg-emerald-600 hover:text-white font-bold' : '' }}">
+                <i class="fa-solid fa-id-badge text-base"></i> My Profile
+            </a>
         </nav>
 
         <!-- Sidebar Footer -->
@@ -102,15 +105,19 @@
                     <i class="fa-solid" :class="darkMode ? 'fa-sun text-amber-400' : 'fa-moon'"></i>
                 </button>
 
-                <div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-800">
-                    <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
-                        {{ strtoupper(substr(auth()->user()?->name ?? 'SA', 0, 2)) }}
+                <a href="{{ route('admin.profile') }}" class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-800 group hover:opacity-80 transition-opacity">
+                    <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs overflow-hidden shadow">
+                        @if(auth()->user()?->avatar)
+                            <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover">
+                        @else
+                            {{ strtoupper(substr(auth()->user()?->name ?? 'SA', 0, 2)) }}
+                        @endif
                     </div>
                     <div class="hidden sm:block text-xs">
-                        <span class="font-bold block text-slate-800 dark:text-slate-200">{{ auth()->user()?->name ?? 'Administrator' }}</span>
+                        <span class="font-bold block text-slate-800 dark:text-slate-200 group-hover:text-emerald-600 transition-colors">{{ auth()->user()?->name ?? 'Administrator' }}</span>
                         <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase">{{ auth()->user()?->roles?->first()?->name ?? 'Super Admin' }}</span>
                     </div>
-                </div>
+                </a>
             </div>
         </header>
 
