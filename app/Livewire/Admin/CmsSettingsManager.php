@@ -20,6 +20,9 @@ class CmsSettingsManager extends Component
     public $impact_children = 380;
     public $impact_trees = 12500;
     public $impact_talents = 150;
+    public $preset_amounts_kes = '500, 1000, 2500, 5000, 10000';
+    public $preset_amounts_usd = '10, 25, 50, 100, 250';
+    public $default_donation_amount = 1000;
     public $deploy_secret = '';
 
     public $saved = false;
@@ -45,6 +48,9 @@ class CmsSettingsManager extends Component
         $this->impact_children = SiteSetting::getByKey('impact_children_sponsored', 380);
         $this->impact_trees = SiteSetting::getByKey('impact_trees_planted', 12500);
         $this->impact_talents = SiteSetting::getByKey('impact_talents_nurtured', 150);
+        $this->preset_amounts_kes = SiteSetting::getByKey('preset_amounts_kes', '500, 1000, 2500, 5000, 10000');
+        $this->preset_amounts_usd = SiteSetting::getByKey('preset_amounts_usd', '10, 25, 50, 100, 250');
+        $this->default_donation_amount = SiteSetting::getByKey('default_donation_amount', 1000);
         $this->deploy_secret = SiteSetting::getByKey('deploy_secret', 'gasua_deploy_token_99');
 
         $this->fetchGitStatus();
@@ -98,6 +104,9 @@ class CmsSettingsManager extends Component
         SiteSetting::setKey('impact_children_sponsored', $this->impact_children);
         SiteSetting::setKey('impact_trees_planted', $this->impact_trees);
         SiteSetting::setKey('impact_talents_nurtured', $this->impact_talents);
+        SiteSetting::setKey('preset_amounts_kes', $this->preset_amounts_kes);
+        SiteSetting::setKey('preset_amounts_usd', $this->preset_amounts_usd);
+        SiteSetting::setKey('default_donation_amount', $this->default_donation_amount);
         SiteSetting::setKey('deploy_secret', $this->deploy_secret);
 
         $this->saved = true;

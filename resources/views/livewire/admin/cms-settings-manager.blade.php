@@ -134,6 +134,25 @@
                 </div>
             </div>
 
+            <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white pt-4 border-t border-slate-100 dark:border-slate-800">Preset Donation Amounts (Public Checkout)</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">KES Preset Amounts (Comma Separated)</label>
+                    <input type="text" wire:model="preset_amounts_kes" placeholder="500, 1000, 2500, 5000, 10000" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono font-bold text-emerald-600">
+                    <span class="text-[10px] text-slate-400 mt-1 block">Displayed on public checkout when KES currency is selected.</span>
+                </div>
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">USD Preset Amounts (Comma Separated)</label>
+                    <input type="text" wire:model="preset_amounts_usd" placeholder="10, 25, 50, 100, 250" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono font-bold text-teal-600">
+                    <span class="text-[10px] text-slate-400 mt-1 block">Displayed on public checkout when USD currency is selected.</span>
+                </div>
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Default Selected Amount</label>
+                    <input type="number" wire:model="default_donation_amount" placeholder="1000" class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-cyan-600">
+                    <span class="text-[10px] text-slate-400 mt-1 block">Initial pre-selected amount on checkout form.</span>
+                </div>
+            </div>
+
             <div class="pt-4">
                 <button type="submit" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg">
                     Save Site Settings

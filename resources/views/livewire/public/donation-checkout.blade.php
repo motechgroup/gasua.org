@@ -100,7 +100,7 @@
                     </div>
 
                     <div class="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-3 text-sm font-bold">
-                        @foreach([500, 1000, 2500, 5000, 10000] as $preset)
+                        @foreach($this->presetAmounts as $preset)
                             <button type="button" wire:click="selectAmount({{ $preset }})" class="py-3 rounded-2xl border text-center transition-all" :class="$wire.amount == {{ $preset }} && !$wire.custom_amount ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'">
                                 {{ $currency }} {{ number_format($preset) }}
                             </button>

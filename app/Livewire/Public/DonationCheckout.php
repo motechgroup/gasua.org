@@ -42,8 +42,30 @@ class DonationCheckout extends Component
     public $isSuccess = false;
     public $errorMessage = '';
 
+    public function getPresetAmountsProperty(): array
+    {
+        if ($this->currency === 'USD') {
+            $raw = \App\Models\SiteSetting::getByKey('preset_amounts_usd', '10, 25, 50, 100, 250');
+        } else {
+            $raw = \App\Models\SiteSetting::getByKey('preset_amounts_kes', '500, 1000, 2500, 5000, 10000');
+        }
+
+        $items = array_map('trim', explode(',', (string) $raw));
+        $numeric = [];
+        foreach ($items as $item) {
+            if (is_numeric($item) && (float)$item > 0) {
+                $numeric[] = (float)$item;
+            }
+        }
+
+        return !empty($numeric) ? $numeric : ($this->currency === 'USD' ? [10, 25, 50, 100, 250] : [500, 1000, 2500, 5000, 10000]);
+    }
+
     public function mount()
     {
+        $defaultAmount = (float) \App\Models\SiteSetting::getByKey('default_donation_amount', 1000);
+        $this->amount = $defaultAmount > 0 ? $defaultAmount : 1000;
+
         $this->campaign_id = request()->query('campaign');
         $this->talent_id = request()->query('talent');
         $this->p2p_fundraiser_id = request()->query('p2p');
