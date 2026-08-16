@@ -91,4 +91,38 @@ class DonationService
 
         return $donation;
     }
+
+    public function deleteDonation(Donation $donation): void
+    {
+        if ($donation->payment_status === 'completed') {
+            // Decrement campaign totals
+            if ($donation->campaign_id) {
+                $campaign = Campaign::find($donation->campaign_id);
+                if ($campaign) {
+                    $campaign->decrement('raised_amount', max(0, $donation->amount));
+                    if ($campaign->donors_count > 0) {
+                        $campaign->decrement('donors_count');
+                    }
+                }
+            }
+
+            // Decrement P2P fundraiser totals
+            if ($donation->p2p_fundraiser_id) {
+                $p2p = P2pFundraiser::find($donation->p2p_fundraiser_id);
+                if ($p2p) {
+                    $p2p->decrement('raised_amount', max(0, $donation->amount));
+                }
+            }
+
+            // Decrement Talent totals
+            if ($donation->talent_id) {
+                $talent = Talent::find($donation->talent_id);
+                if ($talent) {
+                    $talent->decrement('raised_amount', max(0, $donation->amount));
+                }
+            }
+        }
+
+        $donation->delete();
+    }
 }
