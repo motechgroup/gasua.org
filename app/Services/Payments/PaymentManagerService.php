@@ -8,6 +8,7 @@ use App\Models\PaymentLog;
 use App\Models\WebhookLog;
 use App\Services\Payments\Contracts\PaymentGatewayInterface;
 use App\Services\Payments\Drivers\MpesaGatewayService;
+use App\Services\Payments\Drivers\PaystackGatewayService;
 use App\Services\Payments\Drivers\FlutterwaveGatewayService;
 use App\Services\Payments\Drivers\DpoGatewayService;
 use App\Services\Payments\Drivers\PaypalGatewayService;
@@ -27,6 +28,7 @@ class PaymentManagerService
 
         return match ($code) {
             'mpesa' => new MpesaGatewayService($gateway),
+            'paystack' => new PaystackGatewayService($gateway),
             'flutterwave' => new FlutterwaveGatewayService($gateway),
             'dpo' => new DpoGatewayService($gateway),
             'paypal' => new PaypalGatewayService($gateway),

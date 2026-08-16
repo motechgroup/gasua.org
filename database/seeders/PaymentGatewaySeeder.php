@@ -27,6 +27,20 @@ class PaymentGatewaySeeder extends Seeder
                 ],
             ],
             [
+                'code' => 'paystack',
+                'name' => 'Paystack (Cards, M-Pesa & Apple Pay)',
+                'is_enabled' => true,
+                'is_test_mode' => true,
+                'is_default' => false,
+                'fee_percentage' => 0.00,
+                'instructions' => 'Donate using Visa, Mastercard, Safaricom M-Pesa, Bank Transfer, or Apple Pay via Paystack.',
+                'credentials' => [
+                    'public_key' => 'pk_test_pst_DEMO_PUBLIC_KEY',
+                    'secret_key' => 'sk_test_pst_DEMO_SECRET_KEY',
+                    'merchant_email' => 'finance@gusiiallstars.org',
+                ],
+            ],
+            [
                 'code' => 'flutterwave',
                 'name' => 'Flutterwave (Cards & Mobile Money)',
                 'is_enabled' => true,

@@ -54,12 +54,20 @@ class DonationCheckout extends Component
         $status = request()->query('status');
 
         if ($ref) {
-            $this->activeDonation = Donation::where('transaction_reference', $ref)->first();
+            $this->activeDonation = Donation::where('transaction_reference', $ref)
+                ->orWhere('payment_reference', $ref)
+                ->first();
             if ($this->activeDonation) {
                 if ($sessionId && $this->activeDonation->gateway_code === 'stripe') {
                     $verify = app(PaymentManagerService::class)->driver('stripe')->verifyPayment($sessionId);
                     if (($verify['status'] ?? '') === 'completed') {
                         app(PaymentManagerService::class)->markAsCompleted($this->activeDonation);
+                        $this->isSuccess = true;
+                    }
+                } elseif ($this->activeDonation->gateway_code === 'paystack') {
+                    $verify = app(PaymentManagerService::class)->driver('paystack')->verifyPayment($ref);
+                    if (($verify['status'] ?? '') === 'completed') {
+                        app(PaymentManagerService::class)->markAsCompleted($this->activeDonation, $verify['receipt'] ?? $ref);
                         $this->isSuccess = true;
                     }
                 } elseif ($status === 'success' || request()->query('simulated')) {

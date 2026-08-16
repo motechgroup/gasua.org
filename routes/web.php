@@ -34,6 +34,7 @@ use App\Http\Controllers\Webhooks\FlutterwaveWebhookController;
 use App\Http\Controllers\Webhooks\DpoWebhookController;
 use App\Http\Controllers\Webhooks\PaypalWebhookController;
 use App\Http\Controllers\Webhooks\NowpaymentsWebhookController;
+use App\Http\Controllers\Webhooks\PaystackWebhookController;
 use App\Http\Controllers\Webhooks\StripeWebhookController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\SeoController;
@@ -88,6 +89,7 @@ Route::middleware(['throttle:30,1'])->group(function () {
 */
 Route::middleware(['throttle:60,1'])->group(function () {
     Route::post('/webhooks/mpesa', MpesaWebhookController::class)->name('webhooks.mpesa')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
+    Route::post('/webhooks/paystack', PaystackWebhookController::class)->name('webhooks.paystack')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
     Route::post('/webhooks/flutterwave', FlutterwaveWebhookController::class)->name('webhooks.flutterwave')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
     Route::post('/webhooks/dpo', DpoWebhookController::class)->name('webhooks.dpo')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
     Route::post('/webhooks/paypal', PaypalWebhookController::class)->name('webhooks.paypal')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
