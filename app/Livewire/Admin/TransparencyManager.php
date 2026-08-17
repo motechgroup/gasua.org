@@ -21,6 +21,7 @@ class TransparencyManager extends Component
     public function mount()
     {
         $this->enable_public_transparency = (bool) SiteSetting::getByKey('enable_public_transparency', true);
+        $this->expense_date = date('Y-m-d');
     }
 
     public function toggleTransparencyStatus()
@@ -48,6 +49,25 @@ class TransparencyManager extends Component
         ]);
 
         $this->reset(['title', 'amount', 'description']);
+        $this->expense_date = date('Y-m-d');
+        session()->flash('message', 'New expense audit record logged successfully.');
+    }
+
+    public function deleteExpense($id)
+    {
+        $exp = TransparencyExpense::findOrFail($id);
+        $title = $exp->title;
+        $exp->delete();
+
+        session()->flash('message', "Audit expense '{$title}' deleted successfully.");
+    }
+
+    public function clearAllExpenses()
+    {
+        $count = TransparencyExpense::count();
+        TransparencyExpense::truncate();
+
+        session()->flash('message', "Successfully cleared all {$count} audit expense log records.");
     }
 
     public function render()
