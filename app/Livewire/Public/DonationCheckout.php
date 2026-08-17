@@ -94,10 +94,13 @@ class DonationCheckout extends Component
                         $this->isSuccess = true;
                     }
                 } elseif ($this->activeDonation->gateway_code === 'paystack') {
-                    $verify = app(PaymentManagerService::class)->driver('paystack')->verifyPayment($ref);
-                    if (($verify['status'] ?? '') === 'completed') {
-                        app(PaymentManagerService::class)->markAsCompleted($this->activeDonation, $verify['receipt'] ?? $ref);
-                        $this->isSuccess = true;
+                    $trxref = request()->query('trxref') ?? request()->query('reference');
+                    if ($trxref && (request()->has('status') || request()->has('trxref'))) {
+                        $verify = app(PaymentManagerService::class)->driver('paystack')->verifyPayment($trxref);
+                        if (($verify['status'] ?? '') === 'completed') {
+                            app(PaymentManagerService::class)->markAsCompleted($this->activeDonation, $verify['receipt'] ?? $trxref);
+                            $this->isSuccess = true;
+                        }
                     }
                 } elseif ($status === 'success' || request()->query('simulated')) {
                     app(PaymentManagerService::class)->markAsCompleted($this->activeDonation);
@@ -216,6 +219,11 @@ class DonationCheckout extends Component
 
             if (!empty($this->paymentResult['redirect_url'])) {
                 return redirect()->away($this->paymentResult['redirect_url']);
+            }
+
+            if (!($this->paymentResult['success'] ?? false)) {
+                $this->errorMessage = $this->paymentResult['instructions'] ?? 'Failed to initialize payment gateway checkout.';
+                return;
             }
 
             if ($this->paymentResult['success'] && ($this->paymentResult['status'] ?? '') === 'completed') {

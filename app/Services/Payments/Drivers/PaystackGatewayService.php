@@ -31,43 +31,29 @@ class PaystackGatewayService implements PaymentGatewayInterface
     public function initiatePayment(Donation $donation, array $extraInput = []): array
     {
         $creds = $this->gateway->credentials ?? [];
-        $secretKey = $creds['secret_key'] ?? config('services.paystack.secret_key', '');
+        $secretKey = trim($creds['secret_key'] ?? config('services.paystack.secret_key', ''));
 
         $ref = $donation->transaction_reference;
         $currency = strtoupper($donation->currency ?? 'KES');
 
-        // Subunit calculation: Paystack requires amount in smallest currency unit (cents/kobo/cents * 100)
+        // Subunit calculation: Paystack requires amount in smallest currency unit (cents/kobo * 100)
         $amountInSubunits = (int) round($donation->amount * 100);
 
-        // Fallback demo mode if keys are missing or set to demo
+        // If secret key is empty or set to placeholder DEMO
         if (empty($secretKey) || str_contains($secretKey, 'DEMO')) {
-            $returnUrl = CallbackUrlDetector::getReturnUrl('public.donate.checkout', [
-                'reference' => $ref,
-                'status' => 'success',
-            ]);
-
             return [
-                'success' => true,
-                'status' => 'pending',
-                'payment_reference' => $ref,
-                'redirect_url' => $returnUrl,
-                'instructions' => 'Proceeding to Paystack secure checkout portal...',
-                'raw_response' => [
-                    'status' => true,
-                    'message' => 'Simulated Paystack session initialized',
-                    'data' => [
-                        'authorization_url' => $returnUrl,
-                        'access_code' => 'demo_pst_' . rand(1000, 9999),
-                        'reference' => $ref,
-                    ]
-                ],
+                'success' => false,
+                'status' => 'failed',
+                'payment_reference' => null,
+                'instructions' => 'Paystack API Secret Key is not configured. Please enter your valid Paystack Secret Key in Admin Dashboard -> Payment Gateways.',
+                'raw_response' => [],
             ];
         }
 
         $callbackUrl = CallbackUrlDetector::getReturnUrl('public.donate.checkout', ['reference' => $ref]);
 
         $payload = [
-            'email' => $donation->donor_email ?? 'donor@gusiiallstars.org',
+            'email' => !empty($donation->donor_email) ? $donation->donor_email : 'donor@gusiiallstars.org',
             'amount' => $amountInSubunits,
             'currency' => $currency,
             'reference' => $ref,
@@ -112,12 +98,14 @@ class PaystackGatewayService implements PaymentGatewayInterface
                 ];
             }
 
-            Log::error('Paystack Initialize API Non-200 Error: ' . json_encode($json));
+            $errMsg = $json['message'] ?? 'Failed to initialize Paystack checkout session.';
+            Log::error('Paystack Initialize API Error: ' . json_encode($json));
+
             return [
                 'success' => false,
                 'status' => 'failed',
                 'payment_reference' => null,
-                'instructions' => $json['message'] ?? 'Failed to initialize Paystack checkout session.',
+                'instructions' => 'Paystack Error: ' . $errMsg . ' Please check your Paystack API Secret Key in Admin -> Payment Gateways.',
                 'raw_response' => $json ?? [],
             ];
         } catch (\Exception $e) {
@@ -126,7 +114,7 @@ class PaystackGatewayService implements PaymentGatewayInterface
                 'success' => false,
                 'status' => 'failed',
                 'payment_reference' => null,
-                'instructions' => 'Paystack error: ' . $e->getMessage(),
+                'instructions' => 'Paystack Connection Error: ' . $e->getMessage(),
                 'raw_response' => ['error' => $e->getMessage()],
             ];
         }
@@ -134,23 +122,13 @@ class PaystackGatewayService implements PaymentGatewayInterface
 
     public function verifyPayment(string $paymentReference): array
     {
-        // Handle simulated/test references
-        if (str_starts_with($paymentReference, 'PST_DON_') || str_contains($paymentReference, 'demo')) {
-            return [
-                'status' => 'completed',
-                'receipt' => 'PST' . strtoupper(substr(md5($paymentReference), 0, 8)),
-                'message' => 'Paystack simulated transaction completed.',
-            ];
-        }
-
         $creds = $this->gateway->credentials ?? [];
-        $secretKey = $creds['secret_key'] ?? config('services.paystack.secret_key', '');
+        $secretKey = trim($creds['secret_key'] ?? config('services.paystack.secret_key', ''));
 
         if (empty($secretKey) || str_contains($secretKey, 'DEMO')) {
             return [
-                'status' => 'completed',
-                'receipt' => 'PST' . strtoupper(substr(md5($paymentReference), 0, 8)),
-                'message' => 'Paystack test payment verified.',
+                'status' => 'pending',
+                'message' => 'Paystack API Secret Key not configured.',
             ];
         }
 
@@ -180,7 +158,7 @@ class PaystackGatewayService implements PaymentGatewayInterface
     public function handleWebhook(array $payload, array $headers = []): array
     {
         $creds = $this->gateway->credentials ?? [];
-        $secretKey = $creds['secret_key'] ?? config('services.paystack.secret_key', '');
+        $secretKey = trim($creds['secret_key'] ?? config('services.paystack.secret_key', ''));
 
         // Verify webhook signature header if provided
         $signature = $headers['x-paystack-signature'][0] ?? $headers['x-paystack-signature'] ?? null;
