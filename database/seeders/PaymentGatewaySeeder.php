@@ -111,7 +111,7 @@ class PaymentGatewaySeeder extends Seeder
         ];
 
         foreach ($gateways as $gw) {
-            PaymentGateway::updateOrCreate(['code' => $gw['code']], $gw);
+            PaymentGateway::firstOrCreate(['code' => $gw['code']], $gw);
         }
 
         // Force zero fee across all existing gateways
