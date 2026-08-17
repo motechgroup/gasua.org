@@ -94,8 +94,8 @@
                     <div class="flex justify-between items-center mb-3">
                         <label class="block text-xs font-extrabold uppercase text-slate-500">2. Select Amount</label>
                         <div class="flex gap-2 text-xs">
-                            <button type="button" @click="$wire.set('currency', 'KES')" class="px-2.5 py-1 rounded-lg font-bold" :class="$wire.currency === 'KES' ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900' : 'text-slate-500'">KES (KSh)</button>
-                            <button type="button" @click="$wire.set('currency', 'USD')" class="px-2.5 py-1 rounded-lg font-bold" :class="$wire.currency === 'USD' ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900' : 'text-slate-500'">USD ($)</button>
+                            <button type="button" wire:click="selectCurrency('KES')" class="px-2.5 py-1 rounded-lg font-bold" :class="$wire.currency === 'KES' ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900' : 'text-slate-500'">KES (KSh)</button>
+                            <button type="button" wire:click="selectCurrency('USD')" class="px-2.5 py-1 rounded-lg font-bold" :class="$wire.currency === 'USD' ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900' : 'text-slate-500'">USD ($)</button>
                         </div>
                     </div>
 

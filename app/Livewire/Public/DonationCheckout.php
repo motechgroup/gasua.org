@@ -63,8 +63,15 @@ class DonationCheckout extends Component
 
     public function mount()
     {
+        $presets = $this->presetAmounts;
         $defaultAmount = (float) \App\Models\SiteSetting::getByKey('default_donation_amount', 1000);
-        $this->amount = $defaultAmount > 0 ? $defaultAmount : 1000;
+        if (in_array($defaultAmount, $presets)) {
+            $this->amount = $defaultAmount;
+        } elseif (!empty($presets)) {
+            $this->amount = $presets[0];
+        } else {
+            $this->amount = 1000;
+        }
 
         $this->campaign_id = request()->query('campaign');
         $this->talent_id = request()->query('talent');
@@ -100,6 +107,25 @@ class DonationCheckout extends Component
         }
     }
 
+    public function selectCurrency($curr)
+    {
+        $this->currency = strtoupper($curr);
+        $presets = $this->presetAmounts;
+        if (!in_array($this->amount, $presets) && !empty($presets)) {
+            $this->amount = $presets[0];
+        }
+        $this->custom_amount = '';
+    }
+
+    public function updatedCurrency($val)
+    {
+        $presets = $this->presetAmounts;
+        if (!in_array($this->amount, $presets) && !empty($presets)) {
+            $this->amount = $presets[0];
+        }
+        $this->custom_amount = '';
+    }
+
     public function selectAmount($val)
     {
         $this->amount = $val;
@@ -130,8 +156,8 @@ class DonationCheckout extends Component
             return;
         }
 
-        if ($finalAmount < 10 || $finalAmount > 10000000) {
-            $this->errorMessage = 'Donation amount must be between KES 10 and KES 10,000,000.';
+        if ($finalAmount < 1 || $finalAmount > 10000000) {
+            $this->errorMessage = 'Please select or enter a valid donation amount.';
             return;
         }
 
